@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the API contract for the SCOMP LED Peripheral, which provides enhanced control of the LEDs on the DE10 board. The peripheral occupies I/O addresses 0x20-0x25 and implements brightness control with gamma correction, RAM-based pattern playback, and special effects.
+This document defines the API contract for the SCOMP LED Peripheral, which provides enhanced control of the LEDs on the DE10 board. The peripheral occupies I/O addresses 0x20-0x2F and implements brightness control with gamma correction, RAM-based pattern playback, and special effects.
 
 ## Address Map
 
