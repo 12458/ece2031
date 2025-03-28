@@ -9,11 +9,11 @@ This document defines the API contract for the SCOMP LED Peripheral, which provi
 | Address | Name | Description |
 |---------|------|-------------|
 | 0x20 | LED_CONTROL | Direct control of LED states |
-| 0x21 | BRIGHTNESS | Global brightness with gamma correction |
-| 0x22 | PATTERN_CONTROL | Control pattern playback |
-| 0x23 | PATTERN_ADDRESS | RAM address for pattern data |
-| 0x24 | PATTERN_LENGTH | Length of pattern in frames |
-| 0x25 | SPECIAL_EFFECTS | Pre-defined LED effects |
+| 0x21-0x2B | BRIGHTNESS | Global brightness with gamma correction |
+| 0x2C | PATTERN_CONTROL | Control pattern playback |
+| 0x2D | PATTERN_ADDRESS | RAM address for pattern data |
+| 0x2E | PATTERN_LENGTH | Length of pattern in frames |
+| 0x2F | SPECIAL_EFFECTS | Pre-defined LED effects |
 
 ## Register Definitions
 
