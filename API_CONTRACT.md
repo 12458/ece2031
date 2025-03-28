@@ -28,8 +28,8 @@ Direct control of the LED states.
 - Returns the current state of LEDs 0-9 in bits 0-9
 - Bits 10-15: Reserved, will read as 0
 
-### 0x21: BRIGHTNESS
-Controls the global brightness level with gamma correction.
+### 0x21 - 0x2B: BRIGHTNESS
+Controls the global brightness level with gamma correction for LEDs 1-10.
 
 **Write Operation:**
 - Bits 0-7: Brightness level (0 = off, 255 = maximum brightness)
@@ -41,7 +41,7 @@ Controls the global brightness level with gamma correction.
 
 **Note:** Gamma correction is automatically applied to make brightness increases appear linear to human perception.
 
-### 0x22: PATTERN_CONTROL
+### 0x2C: PATTERN_CONTROL
 Controls the playback of LED patterns stored in RAM.
 
 **Write Operation:**
@@ -54,7 +54,7 @@ Controls the playback of LED patterns stored in RAM.
 - Bits 8-14: Current speed setting
 - Bit 15: Current pattern state
 
-### 0x23: PATTERN_ADDRESS
+### 0x2D: PATTERN_ADDRESS
 Specifies the starting address in RAM for pattern data.
 
 **Write Operation:**
@@ -63,7 +63,7 @@ Specifies the starting address in RAM for pattern data.
 **Read Operation:**
 - Bits 0-15: Current pattern address
 
-### 0x24: PATTERN_LENGTH
+### 0x2E: PATTERN_LENGTH
 Specifies the number of frames in the pattern.
 
 **Write Operation:**
@@ -72,7 +72,7 @@ Specifies the number of frames in the pattern.
 **Read Operation:**
 - Bits 0-15: Current pattern length
 
-### 0x25: SPECIAL_EFFECTS
+### 0x2F: SPECIAL_EFFECTS
 Controls pre-defined LED effects.
 
 **Write Operation:**
