@@ -5,6 +5,7 @@ use IEEE.numeric_std.all;
 entity LED_Peripheral is
     port(
         -- Control signals
+		  clk         : in  std_logic;
         resetn      : in  std_logic;
         
         -- SCOMP interface
@@ -18,22 +19,50 @@ entity LED_Peripheral is
 end entity LED_Peripheral;
 
 architecture Behavioral of LED_Peripheral is
-    signal led_reg : std_logic_vector(9 downto 0) := (others => '0');
+    signal led_control : std_logic_vector(9 downto 0) := (others => '0');
+    signal brightness  : std_logic_vector(7 downto 0) := (others => '0');
+    signal pwm_counter : unsigned(7 downto 0) := (others => '0');
 begin
-    -- Simple process to turn on all LEDs when LED_EN is active
-    process(resetn, LED_EN)
+
+    -- Process to capture control data
+    process(clk, resetn)
     begin
         if resetn = '0' then
-            led_reg <= (others => '0');
-        elsif rising_edge(LED_EN) then
+            led_control <= (others => '0');
+            brightness  <= (others => '0');
+        elsif rising_edge(clk) then
             if LED_EN = '1' and IO_WRITE = '1' then
-                -- Store the data to show on LEDs
-                led_reg <= IO_DATA(9 downto 0);
+                led_control <= IO_DATA(9 downto 0);
+                brightness  <= IO_DATA(15 downto 8);
             end if;
         end if;
     end process;
-    
-    -- Connect register to output
-    LEDs <= led_reg;
-    
+
+    -- PWM counter that increments continuously
+    process(clk, resetn)
+    begin
+        if resetn = '0' then
+            pwm_counter <= (others => '0');
+        elsif rising_edge(clk) then
+            pwm_counter <= pwm_counter + 1;
+        end if;
+    end process;
+
+    -- PWM output generation: each LED is on if its control bit is '1'
+    -- and the PWM counter is less than the brightness value
+    process(clk, resetn)
+    begin
+        if resetn = '0' then
+            LEDs <= (others => '0');
+        elsif rising_edge(clk) then
+            for i in 0 to 9 loop
+                if led_control(i) = '1' and pwm_counter < unsigned(brightness) then
+                    LEDs(i) <= '1';
+                else
+                    LEDs(i) <= '0';
+                end if;
+            end loop;
+        end if;
+    end process;
+
 end architecture Behavioral;
