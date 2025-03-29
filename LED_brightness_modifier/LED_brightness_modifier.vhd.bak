@@ -13,7 +13,7 @@ entity LED_brightness_modifier is
 
 	port(
 		clk		 : in	std_logic;
-		brightnessIn: in  std_logic_vector(7 downto 0);
+		brightness	 : in	std_logic_vector (7 downto 0);
 		reset	 : in	std_logic;
 		output	 : out	std_logic
 	);
@@ -21,8 +21,8 @@ entity LED_brightness_modifier is
 end entity;
 
 architecture rtl of LED_brightness_modifier is
-
-type gamma_array_t is array (0 to 255) of unsigned(7 downto 0);
+-- Define an array type that holds 256 8-bit entries
+type gamma_array_t is array (0 to 255) of std_logic_vector(7 downto 0);
 
 -- Declare the constant gamma table
 constant gamma8 : gamma_array_t := (
@@ -107,11 +107,10 @@ constant gamma8 : gamma_array_t := (
  252 => x"EE",253 => x"F1",254 => x"F4",255 => x"FF"
 );
   signal cnt_8bit : unsigned(7 downto 0) := x"00";  
-  signal gamma_val: unsigned(7 downto 0);    
-  signal brightness: unsigned(7 downto 0);  
+  signal gamma_val: unsigned(7 downto 0);           
 begin
 
-  brightness <= unsigned(brightnessIn);
+
   process(clk)
   begin
     if rising_edge(clk) then
@@ -119,9 +118,15 @@ begin
         gamma_val <= x"00";
       else
  
-        gamma_val <= gamma8(to_integer(brightness));
+        gamma_val <= unsigned(gamma8(to_integer(unsigned(brightness))));
       end if;
+    end if;
+  end process;
 
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
       if reset = '1' then
         cnt_8bit <= (others => '0');
       else
