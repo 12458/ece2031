@@ -31,8 +31,8 @@ Controls the global brightness of all LEDs. Overrides all settings as configured
 - Bits 0-7 (0 = off, 255 = maximum brightness)
 - Bits 8-15: Reserved, should be set to 0
 
-### 0x22 - 0x2B: INDIVDUAL BRIGHTNESS
-Controls the indivdual brightness level with gamma correction for LEDs 1-10.
+### 0x22 - 0x2B: INDIVIDUAL BRIGHTNESS
+Controls the individual brightness level with gamma correction for LEDs 1-10.
 
 **Write Operation:**
 - Bits 0-7: Brightness level (0 = off, 255 = maximum brightness)
