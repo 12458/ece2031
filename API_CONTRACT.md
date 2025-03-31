@@ -44,7 +44,7 @@ Controls the individual brightness level with gamma correction for LEDs 1-10.
 
 **Note:** Gamma correction is automatically applied to make brightness increases appear linear to human perception.
 
-### 0x2F: SPECIAL_EFFECTS
+### 0x2C: SPECIAL_EFFECTS
 Controls pre-defined LED effects.
 
 **Write Operation:**
