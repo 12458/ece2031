@@ -53,7 +53,7 @@ Controls pre-defined LED effects.
   - 01: Binary counting
   - 10: Scanner effect
   - 11: Breathing effect
-- Bits 3-4: RESERVED FOR FUTURE USE
+- Bits 3-4: RESERVED FOR FUTURE USE, should be set to 0
 - Bits 4-11: Effect speed (0 = fastest, 255 = slowest)
 - Bits 12-14: Reserved, should be set to 0
 - Bit 15: Effect state (0 = stop, 1 = play)
