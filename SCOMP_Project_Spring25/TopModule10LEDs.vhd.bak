@@ -1,0 +1,48 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity TopModule10LEDs is
+  port(
+    clk              : in  std_logic;
+    reset            : in  std_logic;
+    load             : in  std_logic;                    -- Global load signal
+    input_value      : in  std_logic_vector(7 downto 0);   -- Brightness value
+    led_index_vector : in  std_logic_vector(9 downto 0);   -- One-hot selection
+    leds_out         : out std_logic_vector(9 downto 0)    -- LED outputs
+  );
+end TopModule10LEDs;
+
+architecture Behavioral of TopModule10LEDs is
+
+  component LED_brightness_modifier
+    generic (
+      BRIGHTNESS_WIDTH : natural := 8
+    );
+    port (
+      clk         : in  std_logic;
+      brightnessIn: in  std_logic_vector(BRIGHTNESS_WIDTH - 1 downto 0);
+      reset       : in  std_logic;
+      load        : in  std_logic;
+      output      : out std_logic
+    );
+  end component;
+
+begin
+
+  gen_led_inst: for i in 0 to 9 generate
+  begin
+    LED_inst: LED_brightness_modifier
+      generic map (
+        BRIGHTNESS_WIDTH => 8
+      )
+      port map (
+        clk          => clk,
+        brightnessIn => input_value,
+        reset        => reset,
+        load         => load or led_index_vector(i),
+        output       => leds_out(i)
+      );
+  end generate;
+
+end Behavioral;

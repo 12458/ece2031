@@ -1,68 +1,28 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
-entity LED_Peripheral is
-    port(
-        -- Control signals
-		  clk         : in  std_logic;
-        resetn      : in  std_logic;
-        
-        -- SCOMP interface
-        LED_EN      : in  std_logic;
-        IO_WRITE    : in  std_logic;
-        IO_DATA     : in  std_logic_vector(15 downto 0);
-        
-        -- Hardware interface
-        LEDs        : out std_logic_vector(9 downto 0)
-    );
-end entity LED_Peripheral;
+ENTITY LEDController IS
+  PORT(
+    CS           : IN  STD_LOGIC;
+	 RESETN        : IN  STD_LOGIC;  -- Active low reset for the controller
+	 IO_DATA       : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+    WRITE_EN      : IN  STD_LOGIC;
+    led_reset_bus : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
+  );
+END LEDController;
 
-architecture Behavioral of LED_Peripheral is
-    signal led_control : std_logic_vector(9 downto 0) := (others => '0');
-    signal brightness  : std_logic_vector(7 downto 0) := (others => '0');
-    signal pwm_counter : unsigned(7 downto 0) := (others => '0');
-begin
-
-    -- Process to capture control data
-    process(clk, resetn)
-    begin
-        if resetn = '0' then
-            led_control <= (others => '0');
-            brightness  <= (others => '0');
-        elsif rising_edge(clk) then
-            if LED_EN = '1' and IO_WRITE = '1' then
-                led_control <= IO_DATA(9 downto 0);
-                brightness  <= IO_DATA(15 downto 8);
-            end if;
-        end if;
-    end process;
-
-    -- PWM counter that increments continuously
-    process(clk, resetn)
-    begin
-        if resetn = '0' then
-            pwm_counter <= (others => '0');
-        elsif rising_edge(clk) then
-            pwm_counter <= pwm_counter + 1;
-        end if;
-    end process;
-
-    -- PWM output generation: each LED is on if its control bit is '1'
-    -- and the PWM counter is less than the brightness value
-    process(clk, resetn)
-    begin
-        if resetn = '0' then
-            LEDs <= (others => '0');
-        elsif rising_edge(clk) then
-            for i in 0 to 9 loop
-                if led_control(i) = '1' and pwm_counter < unsigned(brightness) then
-                    LEDs(i) <= '1';
-                else
-                    LEDs(i) <= '0';
-                end if;
-            end loop;
-        end if;
-    end process;
-
-end architecture Behavioral;
+ARCHITECTURE Behavioral OF LEDController IS
+BEGIN
+  PROCESS(RESETN, CS)
+  BEGIN
+    IF (RESETN = '0') THEN
+      -- Hold reset high on all LED submodules to turn off the LEDs.
+      led_reset_bus <= (OTHERS => '1');
+    ELSIF (RISING_EDGE(CS)) THEN
+      IF WRITE_EN = '1' THEN
+        -- Update the bus with the inverted lower 10 bits of IO_DATA.
+        led_reset_bus <= NOT IO_DATA(9 DOWNTO 0);
+      END IF;
+    END IF;
+  END PROCESS;
+END Behavioral;
