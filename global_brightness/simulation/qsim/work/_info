@@ -1,0 +1,103 @@
+m255
+K4
+z2
+!s11e vcom 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/borgi/ece2031/global_brightness/simulation/qsim
+Eglobal_brightness
+Z1 w1743390912
+Z2 DPx4 ieee 16 vital_primitives 0 22 G>kiXP8Q9dRClKfK1Zn7j1
+Z3 DPx8 cyclonev 18 cyclonev_atom_pack 0 22 3HQPc5MVbmOPN?>a5EBYj2
+Z4 DPx4 ieee 12 vital_timing 0 22 J>EBealN09f8GzldA[z2>3
+Z5 DPx8 cyclonev 19 cyclonev_components 0 22 jZ]H46BQLgIP5mfRTO`3B1
+Z6 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z7 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+Z8 DPx12 altera_lnsim 23 altera_lnsim_components 0 22 ^Ch;U@;bMk1;>A2B<UV`k2
+!i122 2
+R0
+Z9 8global_brightness.vho
+Z10 Fglobal_brightness.vho
+l0
+L37 1
+VKoR@llZd`P20Vf1;l^HW02
+!s100 Oba;m?=mHNa>;H4P_KklS2
+Z11 OV;C;2020.1;71
+32
+Z12 !s110 1743390913
+!i10b 1
+Z13 !s108 1743390913.000000
+Z14 !s90 -work|work|global_brightness.vho|
+Z15 !s107 global_brightness.vho|
+!i113 1
+Z16 o-work work
+Z17 tExplicit 1 CvgOpt 0
+Astructure
+R2
+R3
+R4
+R5
+R6
+R7
+R8
+DEx4 work 17 global_brightness 0 22 KoR@llZd`P20Vf1;l^HW02
+!i122 2
+l76
+L45 250
+Vj8PXGCzMPAdBe:no6e@VC3
+!s100 04IK;@z01PzmHj:GCInGz0
+R11
+32
+R12
+!i10b 1
+R13
+R14
+R15
+!i113 1
+R16
+R17
+Eglobal_brightness_vhd_vec_tst
+Z18 w1743390911
+R6
+R7
+!i122 3
+R0
+Z19 8Waveform.vwf.vht
+Z20 FWaveform.vwf.vht
+l0
+L32 1
+VPl<eDb7C]ozW]La;B6Z@_0
+!s100 [z7T^K_dKKizCfR==ln[10
+R11
+32
+R12
+!i10b 1
+R13
+Z21 !s90 -work|work|Waveform.vwf.vht|
+Z22 !s107 Waveform.vwf.vht|
+!i113 1
+R16
+R17
+Aglobal_brightness_arch
+R6
+R7
+Z23 DEx4 work 29 global_brightness_vhd_vec_tst 0 22 Pl<eDb7C]ozW]La;B6Z@_0
+!i122 3
+l47
+Z24 L34 93
+Z25 V>VKY9R;M2R7=POQ3_3;ma3
+Z26 !s100 NWc92i;eSjm8ggIAc[2TN2
+R11
+32
+R12
+!i10b 1
+R13
+R21
+R22
+!i113 1
+R16
+R17
