@@ -105,15 +105,15 @@ ARCHITECTURE rtl OF LED_brightness_modifier IS
 	);
 	SIGNAL cnt : brightness_t := (OTHERS => '0');
 	SIGNAL gamma_val : brightness_t;
-	SIGNAL brightness_reg : brightness_t := (OTHERS => '0');
+	SIGNAL brightness_reg : brightness_t := (OTHERS => '1');
 
 BEGIN
     PROCESS (clk, reset, load, brightnessIn)
     BEGIN
         -- Asynchronous reset
-        IF reset = '1' THEN
+        IF reset = '0' THEN
             cnt <= (OTHERS => '0');
-            brightness_reg <= (OTHERS => '0');
+            brightness_reg <= (OTHERS => '1');
         -- Asynchronous load
         ELSIF load = '1' THEN
             brightness_reg <= unsigned(brightnessIn);

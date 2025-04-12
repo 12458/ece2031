@@ -1,0 +1,18 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 902D; --         IN      KeyIO
+0001: 4000; --         JZERO   Initialization
+0002: BBFF; --         LOADI	1023
+0003: 9820; --         OUT		LEDToggle
+0004: B8FF; --         LOADI	255
+0005: 9821; --         OUT		LEDGlobal
+0006: 2807; --         JUMP	EndLoop
+0007: 2807; -- 	JUMP	EndLoop
+[0008..07FF] : 0000; -- [empty memory]
+END;
+

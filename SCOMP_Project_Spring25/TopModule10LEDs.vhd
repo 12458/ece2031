@@ -9,7 +9,6 @@ ENTITY TopModule10LEDs IS
         led_index_vector : IN std_logic_vector(9 DOWNTO 0); -- One-hot selection
         IO_WRITE         : IN std_logic;
         IO_DATA          : IN std_logic_vector(15 downto 0);
-        led_reset_bus    : IN std_logic_vector(9 DOWNTO 0); -- Bus to control each submodule's reset
         CS               : IN std_logic;
         LEDS_OUT         : OUT std_logic_vector(9 DOWNTO 0) -- LED outputs
     );
@@ -29,7 +28,7 @@ ARCHITECTURE Behavioral OF TopModule10LEDs IS
     END COMPONENT;
     -- Temporary register to store the brightness value from IO_DATA.
     -- Only the lower 8 bits are used; the upper 8 bits are ignored.
-    SIGNAL temp_reg : std_logic_vector(7 downto 0) := (others => '0');
+    SIGNAL temp_reg : std_logic_vector(7 downto 0) := (others => '1');
     
     -- Added load_signal bus to connect to each LED module
     SIGNAL load_signal : std_logic_vector(9 DOWNTO 0);
@@ -38,7 +37,7 @@ BEGIN
     process(CS, resetn)
     begin
         if resetn = '0' then
-            temp_reg <= (others => '0');
+            temp_reg <= (others => '1');
         elsif rising_edge(CS) then
             if IO_WRITE = '1' then
                 -- Capture lower 8 bits of IO_DATA; upper 8 bits are ignored.
@@ -61,7 +60,7 @@ BEGIN
             PORT MAP (
                 clk          => clk, 
                 brightnessIn => temp_reg, 
-                reset        => led_reset_bus(i),  -- Individual reset for each LED module
+                reset        => resetn,  -- Using global resetn signal directly
                 load         => load_signal(i),    -- Using the separated load signal 
                 output       => LEDS_OUT(i)
             );
