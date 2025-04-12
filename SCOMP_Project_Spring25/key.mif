@@ -1,0 +1,14 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+[0000..0009] : 0000; -- [empty memory]
+000A: 902D; -- IN &amp;H02D
+000B: 9820; -- OUT &amp;H020
+000C: 280A; -- JUMP 10
+[000D..07FF] : 0000; -- [empty memory]
+END;
+
