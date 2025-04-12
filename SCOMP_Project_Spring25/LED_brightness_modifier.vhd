@@ -108,20 +108,20 @@ ARCHITECTURE rtl OF LED_brightness_modifier IS
 	SIGNAL brightness_reg : brightness_t := (OTHERS => '0');
 
 BEGIN
-	PROCESS (clk, reset)
-	BEGIN
-		IF rising_edge(clk) THEN
-			IF reset = '1' THEN
-				cnt <= (OTHERS => '0');
-				brightness_reg <= (OTHERS => '0');
-			ELSE
-				IF load = '1' THEN
-					brightness_reg <= unsigned(brightnessIn);
-				END IF;
-				cnt <= cnt + 1;
-			END IF;
-		END IF;
-	END PROCESS;
+    PROCESS (clk, reset, load, brightnessIn)
+    BEGIN
+        -- Asynchronous reset
+        IF reset = '1' THEN
+            cnt <= (OTHERS => '0');
+            brightness_reg <= (OTHERS => '0');
+        -- Asynchronous load
+        ELSIF load = '1' THEN
+            brightness_reg <= unsigned(brightnessIn);
+        -- Synchronous counter
+        ELSIF rising_edge(clk) THEN
+            cnt <= cnt + 1;
+        END IF;
+    END PROCESS;
 
 	gamma_val <= gamma8(to_integer(brightness_reg));
 	output <= '1' WHEN cnt < gamma_val ELSE '0';
