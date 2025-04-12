@@ -11,6 +11,7 @@ Initialization:
                          
                          AND B0
                          JPOS Demo1_Loop
+                         LOAD KeyInput
                          AND B1
                          JPOS Demo2_Loop
                          
@@ -28,9 +29,11 @@ Demo1_Loop:
                          OUT LEDToggle ; Turn off all LEDs
                          
 AdderLoop: ; Wait for KEY1 to be pressed
-                         IN KeyInput
+                         IN KeyIO
+                         STORE KeyInput
                          AND B2
                          JPOS Initialization
+                         LOAD KeyInput
                          AND B0
                          JZERO AdderLoop ; Only continue if KEY1 is pressed
                          
@@ -38,6 +41,7 @@ AdderLoop: ; Wait for KEY1 to be pressed
                          STORE AdderInput ; Store User input
                          LOAD AdderSum ; Load current running sum (does nothing on first loop)
                          ADD AdderInput ; Add input value to running Sum
+                         AND 10bits ; Mask relevant bits 
                          STORE AdderSum
                          OUT LEDToggle ; Display new sum on LEDs
                          JUMP AdderLoop ; Jump to InputLoop to wait for next value
@@ -54,10 +58,13 @@ Demo2_Loop: ; Wait for a key to be pressed
                          
                          JZERO Demo2_Loop ; Only continue if a key is pressed
                          
+                         LOAD KeyInput
                          AND B0
                          JPOS Initialization
+                         LOAD KeyInput
                          AND B1
                          JPOS Individual_Loop
+                         LOAD KeyInput
                          AND B2 
                          JPOS Global_Loop
                          
@@ -74,10 +81,13 @@ Global_Loop:
                          
                          JZERO Global_Loop
                          
+                         LOAD KeyInput
                          AND B0
                          JPOS Initialization
+                         LOAD KeyInput
                          AND B1
                          JPOS IncreaseGlobal
+                         LOAD KeyInput
                          AND B2
                          JPOS DecreaseGlobal
                          
@@ -133,10 +143,13 @@ Individual_Loop:
                          
                          JZERO Individual_Loop
                          
-                         
+                         LOAD KeyInput
                          AND B0
+                         JPOS Initialization
+                         LOAD KeyInput
                          AND B1
                          JPOS IncreaseIndividual
+                         LOAD KeyInput
                          AND B2
                          JPOS DecreaseIndividual
                          JUMP Individual_Loop
@@ -276,6 +289,8 @@ NegativeDelta: DW -32
                          
 AdderSum: DW 0
 AdderInput: DW 0
+                         
+10bits: DW 1023
                          
                          
                          
