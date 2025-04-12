@@ -108,6 +108,9 @@ Global_Loop:
 ; ██ ██  ██ ██ ██      ██   ██ ██      ██   ██      ██ ██          ██    ██ ██      ██    ██ ██   ██ ██   ██ ██      
 ; ██ ██   ████  ██████ ██   ██ ███████ ██   ██ ███████ ███████      ██████  ███████  ██████  ██████  ██   ██ ███████
 IncreaseGlobal:
+        LOADI   1023
+        OUT     LEDToggle
+
         IN      LEDGlobal
         ADD     PositiveDelta
         STORE   NewBright
@@ -128,6 +131,9 @@ IncreaseGlobal:
 ; ██   ██ ██      ██      ██   ██ ██      ██   ██      ██ ██          ██    ██ ██      ██    ██ ██   ██ ██   ██ ██      
 ; ██████  ███████  ██████ ██   ██ ███████ ██   ██ ███████ ███████      ██████  ███████  ██████  ██████  ██   ██ ███████
 DecreaseGlobal:
+        LOADI   1023
+        OUT     LEDToggle
+
         IN      LEDGlobal
         ADD     NegativeDelta
         STORE   NewBright
