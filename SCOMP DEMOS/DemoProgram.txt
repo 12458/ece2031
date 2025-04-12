@@ -176,7 +176,7 @@ Individual_Loop:
 IncreaseIndividual:
         IN      Switches
         STORE   Input
-        LOADI   LEDBaseADDR
+        LOAD   LEDBaseADDR
         STORE   CurLEDADDR
 
 IncreaseIndividual_Loop:
@@ -230,7 +230,7 @@ Assign255:
 DecreaseIndividual:
         IN      Switches
         STORE   Input
-        LOADI   LEDBaseADDR
+        LOAD   LEDBaseADDR
         STORE   CurLEDADDR
 
 DecreaseIndividual_Loop:
