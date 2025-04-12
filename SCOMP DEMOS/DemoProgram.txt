@@ -229,9 +229,10 @@ Assign255:
 ; ██████  ███████  ██████ ██   ██ ███████ ██   ██ ███████ ███████     ██ ██   ████ ██████  ██   ████   ██ ██████   ██████  ██   ██ ███████                           
 DecreaseIndividual:
         IN      Switches
-        STORE   Input
-        LOAD   LEDBaseADDR
-        STORE   CurLEDADDR
+        STORE   Input           ; get current switch state
+
+        LOAD    LEDBaseADDR
+        STORE   CurLEDADDR      ; reset current led address to base
 
 DecreaseIndividual_Loop:
         LOAD    Input
