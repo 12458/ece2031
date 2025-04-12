@@ -31,16 +31,18 @@ Demo1_Loop:
 AdderLoop:                      ; Wait for KEY1 to be pressed
         IN      KeyIO
         STORE   KeyInput
+
+        JZERO   AdderLoop
+
         AND     B2
         JPOS    Initialization
+        
         LOAD    KeyInput
         AND     B0
         JZERO   AdderLoop      ; Only continue if KEY1 is pressed
 
         IN      Switches        ; Grab input value from Switches
-        STORE   AdderInput           ; Store User input
-        LOAD    AdderSum             ; Load current running sum (does nothing on first loop)
-        ADD     AdderInput           ; Add input value to running Sum
+        ADD     AdderSum             ; Load current running sum (does nothing on first loop)
         AND     10bits                 ; Mask relevant bits 
         STORE   AdderSum
         OUT     LEDToggle       ; Display new sum on LEDs
