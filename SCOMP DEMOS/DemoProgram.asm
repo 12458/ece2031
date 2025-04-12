@@ -1,0 +1,297 @@
+                         ; ██ ███ ██ ██ ████████ ██ █████ ██ ██ ███████ █████ ████████ ██ ██████ ███ ██ 
+                         ; ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ███ ██ ██ ██ ██ ██ ██ ████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ███████ ██ ██ ███ ███████ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ███ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ████ ██ ██ ██ ██ ██ ███████ ██ ███████ ██ ██ ██ ██ ██████ ██ ████
+Initialization: 
+                         IN KeyIO
+                         STORE KeyInput
+                         
+                         JZERO Initialization
+                         
+                         AND B0
+                         JPOS Demo1_Loop
+                         AND B1
+                         JPOS Demo2_Loop
+                         
+                         JUMP Initialization
+                         
+                         
+                         
+                         ; ██████ ███████ ███ ███ ██████ ██ ██ ██████ ██████ ██████ 
+                         ; ██ ██ ██ ████ ████ ██ ██ ███ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ █████ ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██████ ███████ ██ ██ ██████ ██ ███████ ██████ ██████ ██ 
+Demo1_Loop: 
+                         LOADI 0
+                         OUT LEDToggle ; Turn off all LEDs
+                         
+AdderLoop: ; Wait for KEY1 to be pressed
+                         IN KeyInput
+                         AND B2
+                         JPOS Initialization
+                         AND B0
+                         JZERO AdderLoop ; Only continue if KEY1 is pressed
+                         
+                         IN Switches ; Grab input value from Switches
+                         STORE AdderInput ; Store User input
+                         LOAD AdderSum ; Load current running sum (does nothing on first loop)
+                         ADD AdderInput ; Add input value to running Sum
+                         STORE AdderSum
+                         OUT LEDToggle ; Display new sum on LEDs
+                         JUMP AdderLoop ; Jump to InputLoop to wait for next value
+                         
+                         
+                         ; ██████ ███████ ███ ███ ██████ ██████ ██ ██████ ██████ ██████ 
+                         ; ██ ██ ██ ████ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ █████ ██ ████ ██ ██ ██ █████ ██ ██ ██ ██ ██ ██████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██████ ███████ ██ ██ ██████ ███████ ███████ ██████ ██████ ██ 
+Demo2_Loop: ; Wait for a key to be pressed
+                         IN KeyIO
+                         STORE KeyInput
+                         
+                         JZERO Demo2_Loop ; Only continue if a key is pressed
+                         
+                         AND B0
+                         JPOS Initialization
+                         AND B1
+                         JPOS Individual_Loop
+                         AND B2 
+                         JPOS Global_Loop
+                         
+                         
+                         
+                         ; ██████ ██ ██████ ██████ █████ ██ ██ ██████ ██████ ██████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ███ ██ ██ ██ ██████ ███████ ██ ██ ██ ██ ██ ██ ██████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██████ ███████ ██████ ██████ ██ ██ ███████ ███████ ██████ ██████ ██
+Global_Loop: 
+                         IN KeyIO
+                         STORE KeyInput
+                         
+                         JZERO Global_Loop
+                         
+                         AND B0
+                         JPOS Initialization
+                         AND B1
+                         JPOS IncreaseGlobal
+                         AND B2
+                         JPOS DecreaseGlobal
+                         
+                         JUMP Global_Loop
+                         
+                         
+                         ; ██ ███ ██ ██████ ██████ ███████ █████ ███████ ███████ ██████ ██ ██████ ██████ █████ ██ 
+                         ; ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ██ ██ ██ ██████ █████ ███████ ███████ █████ ██ ███ ██ ██ ██ ██████ ███████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ████ ██████ ██ ██ ███████ ██ ██ ███████ ███████ ██████ ███████ ██████ ██████ ██ ██ ███████
+IncreaseGlobal: 
+                         IN LEDGlobal
+                         ADD PositiveDelta
+                         STORE NewBright
+                         
+                         SUB 255
+                         JPOS Assign255
+                         
+                         LOAD NewBright
+                         OUT LEDGlobal
+                         JUMP Global_Loop
+                         
+                         
+                         
+                         
+                         ; ██████ ███████ ██████ ██████ ███████ █████ ███████ ███████ ██████ ██ ██████ ██████ █████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ █████ ██ ██████ █████ ███████ ███████ █████ ██ ███ ██ ██ ██ ██████ ███████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██████ ███████ ██████ ██ ██ ███████ ██ ██ ███████ ███████ ██████ ███████ ██████ ██████ ██ ██ ███████
+DecreaseGlobal: 
+                         IN LEDGlobal
+                         ADD NegativeDelta
+                         STORE NewBright
+                         
+                         JNEG AssignZero
+                         
+                         LOAD NewBright
+                         OUT LEDGlobal
+                         JUMP Global_Loop
+                         
+                         
+                         
+                         ; ██ ███ ██ ██████ ██ ██ ██ ██ ██████ ██ ██ █████ ██ ██ ██████ ██████ ██████ 
+                         ; ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ███████ ██ ██ ██ ██ ██ ██ ██████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ████ ██████ ██ ████ ██ ██████ ██████ ██ ██ ███████ ███████ ██████ ██████ ██ 
+Individual_Loop: 
+                         IN KeyIO
+                         STORE KeyInput
+                         
+                         JZERO Individual_Loop
+                         
+                         
+                         AND B0
+                         AND B1
+                         JPOS IncreaseIndividual
+                         AND B2
+                         JPOS DecreaseIndividual
+                         JUMP Individual_Loop
+                         
+                         
+                         
+                         
+                         ; ██ ███ ██ ██████ ██████ ███████ █████ ███████ ███████ ██ ███ ██ ██████ ██ ██ ██ ██ ██████ ██ ██ █████ ██ 
+                         ; ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ██ ██ ██ ██████ █████ ███████ ███████ █████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ███████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ████ ██████ ██ ██ ███████ ██ ██ ███████ ███████ ██ ██ ████ ██████ ██ ████ ██ ██████ ██████ ██ ██ ███████ 
+IncreaseIndividual: 
+                         IN Switches
+                         STORE Input
+                         LOADI LEDBaseADDR
+                         STORE CurLEDADDR
+                         
+IncreaseIndividual_Loop: 
+                         LOAD Input
+                         AND 1
+                         JPOS BrightnessUp ; if LSB is 1, edit LED
+                         
+                         LOAD Input
+                         SHIFT -1 ; Shift switch input to operate on next LED bit
+                         STORE Input
+                         
+                         LOAD CurLEDADDR
+                         ADDI 1 ; Iterate LED
+                         STORE CurLEDADDR
+                         LOAD
+                         
+                         ADDI -44 ; Check condition 0x2C
+                         JPOS IncreaseIndividual_Loop
+                         JUMP Individual_Loop
+                         
+BrightnessUp: 
+                         LOAD CurLEDADDR
+                         IN CurLEDADDR ; Read current brightness of this LED
+                         
+                         ADD PositiveDelta
+                         STORE NewBright ; Increase brightness
+                         
+                         SUB 255
+                         JPOS Assign255 ; reassign overflows
+                         
+                         LOAD NewBright
+                         OUT CurLEDADDR ; Write new brightness to the LED
+                         RETURN
+                         
+Assign255: 
+                         LOADI 255
+                         STORE NewBright
+                         RETURN
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         ; ██████ ███████ ██████ ██████ ███████ █████ ███████ ███████ ██ ███ ██ ██████ ██ ██ ██ ██ ██████ ██ ██ █████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ █████ ██ ██████ █████ ███████ ███████ █████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ███████ ██ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██████ ███████ ██████ ██ ██ ███████ ██ ██ ███████ ███████ ██ ██ ████ ██████ ██ ████ ██ ██████ ██████ ██ ██ ███████ 
+DecreaseIndividual: 
+                         IN Switches
+                         STORE Input
+                         LOADI LEDBaseADDR
+                         STORE CurLEDADDR
+                         
+DecreaseIndividual_Loop: 
+                         LOAD Input
+                         AND 1
+                         JPOS BrightnessDown ; if LSB is 1, edit LED
+                         
+                         LOAD Input
+                         SHIFT -1 ; Shift switch input to operate on next LED bit
+                         STORE Input
+                         
+                         LOAD CurLEDADDR
+                         ADDI 1 ; Iterate LED
+                         STORE CurLEDADDR
+                         LOAD
+                         
+                         ADDI -44 ; Check if last LED has been operated on
+                         JPOS DecreaseIndividual_Loop
+                         RETURN
+                         
+BrightnessDown: 
+                         LOAD CurLEDADDR
+                         IN CurLEDADDR ; Read current brightness of this LED
+                         
+                         ADD NegativeDelta
+                         STORE NewBright ; Increase brightness
+                         
+                         JNEG AssignZero ; reassign overflows
+                         
+                         LOAD NewBright
+                         OUT CurLEDADDR ; Write new brightness to the LED
+                         RETURN
+                         
+AssignZero: 
+                         LOADI 0
+                         STORE NewBright
+                         RETURN
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         ; ██ ██ █████ ██████ ██ █████ ██████ ██ ███████ ███████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ███████ ██████ ██ ███████ ██████ ██ █████ ███████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ████ ██ ██ ██ ██ ██ ██ ██ ██████ ███████ ███████ ███████
+                         
+Input: DW 0
+CurLEDADDR: DW 0
+NewBright: DW 0
+KeyInput: DW 0
+                         
+B0: DW 1
+B1: DW 2
+B2: DW 4
+                         
+PositiveDelta: DW 32
+NegativeDelta: DW -32
+                         
+AdderSum: DW 0
+AdderInput: DW 0
+                         
+                         
+                         
+                         
+                         
+                         ; ██ ██████ █████ ██████ ██████ ██████ ███████ ███████ ███████ ███████ ███████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██ ██ ███████ ██ ██ ██ ██ ██████ █████ ███████ ███████ █████ ███████ 
+                         ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
+                         ; ██ ██████ ██ ██ ██████ ██████ ██ ██ ███████ ███████ ███████ ███████ ███████
+                         
+Switches: EQU 000
+KeyIO: EQU &H02D
+LEDToggle: EQU &H020
+LEDGlobal: EQU &H021
+                         
+LEDBaseADDR: EQU &H022
+                         
+                         
