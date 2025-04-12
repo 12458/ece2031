@@ -1,10 +1,10 @@
         ; === RESET START ===
-        IN      &H40            ; Read switch state
+        IN      Switches            ; Read switch state
         STORE   SWITCH_STATE
         JZERO   GLOBAL_MODE     ; If all switches down, enter global mode
 
         ; === INDIVIDUAL MODE ===
-        IN      &H41            ; Read KEYs
+        IN      KeyIO            ; Read KEYs
         STORE   KEYS
         LOADI   1
         AND     KEYS
@@ -23,7 +23,7 @@ CHECK_KEY1_INDIV:
 
 ; === GLOBAL MODE ===
 GLOBAL_MODE:
-        IN      &H41
+        IN      KeyIO
         STORE   KEYS
         LOADI   1
         AND     KEYS
@@ -42,15 +42,15 @@ CHECK_KEY1_GLOBAL:
 
 ; === GLOBAL BRIGHTNESS MODIFIERS ===
 INCREASE_GLOBAL_BRIGHTNESS:
-        IN      &H21
+        IN      
         ADDI    25
-        OUT     &H21
+        OUT     LEDGlobal
         RETURN
 
 DECREASE_GLOBAL_BRIGHTNESS:
-        IN      &H21
+        IN      LEDGlobal
         ADDI    -25
-        OUT     &H21
+        OUT     LEDGlobal
         RETURN
 
 ; === INDIVIDUAL BRIGHTNESS: ADD ===
@@ -117,4 +117,22 @@ LED_PTR:        DW   0
 END:
 NOP
 
+
+
+; IO ADDRESS CONSTANTS
+
+Switches  : EQU 000
+KeyIO     : EQU &H02D
+LEDToggle : EQU &H020
+LEDGlobal : EQU &H021
+LED0            : EQU &H022
+LED1            : EQU &H023
+LED2            : EQU &H024
+LED3            : EQU &H025
+LED4            : EQU &H026
+LED5            : EQU &H027
+LED6            : EQU &H028
+LED7            : EQU &H029
+LED8            : EQU &H02A
+LED9            : EQU &H02B
 

@@ -32,6 +32,6 @@ Input : DW 0
 ; IO ADDRESS CONSTANTS
 
 Switches  : EQU 000
-KEYs      : EQU XXX ; placeholder
+KEYs      : EQU &H02D
 LEDToggle : EQU &H020
 
