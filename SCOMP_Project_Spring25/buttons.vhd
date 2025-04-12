@@ -11,7 +11,7 @@ ENTITY buttons IS
   PORT(
     CS          : IN    STD_LOGIC;
 	 READ_EN     : IN    STD_LOGIC;
-    DI          : IN    STD_LOGIC_VECTOR(1 DOWNTO 0);
+    DI          : IN    STD_LOGIC_VECTOR(2 DOWNTO 0);
     IO_DATA     : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END buttons;
@@ -34,7 +34,7 @@ ARCHITECTURE a OF buttons IS
     PROCESS
     BEGIN
       WAIT UNTIL RISING_EDGE(CS);
-      B_DI <= "00000000000000" & DI; -- sample the input on the rising edge of CS
+      B_DI <= "0000000000000" & (NOT DI); -- sample the input on the rising edge of CS
     END PROCESS;
 
 END a;

@@ -1,0 +1,57 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "output",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[4]",
+					"strict" : false
+				},
+				{
+					"name" : "load",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[3]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[2]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[1]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[7]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[5]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[6]",
+					"strict" : false
+				},
+				{
+					"name" : "brightnessIn[0]",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

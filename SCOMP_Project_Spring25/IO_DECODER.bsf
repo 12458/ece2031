@@ -101,6 +101,13 @@ https://fpgasoftware.intel.com/eula.
 		(text "LED_INDEX_VECTOR[9..0]" (rect 206 155 331 167)(font "Arial" ))
 		(line (pt 352 160)(pt 336 160)(line_width 3))
 	)
+	(port
+		(pt 352 176)
+		(output)
+		(text "BUTTON_EN" (rect 0 0 59 12)(font "Arial" ))
+		(text "BUTTON_EN" (rect 272 171 331 183)(font "Arial" ))
+		(line (pt 352 176)(pt 336 176)(line_width 1))
+	)
 	(drawing
 		(rectangle (rect 16 16 336 192)(line_width 1))
 	)
