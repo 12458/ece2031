@@ -1,9 +1,9 @@
-        ; === RESET START ===
+; === RESET START ===
         IN      Switches            ; Read switch state
         STORE   SWITCH_STATE
         JZERO   GLOBAL_MODE     ; If all switches down, enter global mode
 
-        ; === INDIVIDUAL MODE ===
+; === INDIVIDUAL MODE ===
         IN      KeyIO            ; Read KEYs
         STORE   KEYS
         LOADI   1
@@ -40,6 +40,7 @@ CHECK_KEY1_GLOBAL:
         CALL    INCREASE_GLOBAL_BRIGHTNESS
         JUMP    END
 
+
 ; === GLOBAL BRIGHTNESS MODIFIERS ===
 INCREASE_GLOBAL_BRIGHTNESS:
         IN      
@@ -53,7 +54,23 @@ DECREASE_GLOBAL_BRIGHTNESS:
         OUT     LEDGlobal
         RETURN
 
+
+
 ; === INDIVIDUAL BRIGHTNESS: ADD ===
+        STORE   CurLED
+        IN      Switches
+        STORE   SWITCH_STATE
+        AND 1
+        JPOS    BrightnessUp // if LSB is 1, edit LED
+        LOAD    CurLED
+        ADDI    1
+        STORE   CurLED
+        
+BrightnessUp
+        
+
+
+
 MODIFY_LED_BRIGHTNESS_ADD:
         LOADI   &H22
         STORE   LED_PTR
@@ -80,6 +97,8 @@ SKIP_ADD:
         SUB     LED_PTR
         JPOS    LOOP_ADD
         RETURN
+
+
 
 ; === INDIVIDUAL BRIGHTNESS: SUB ===
 MODIFY_LED_BRIGHTNESS_SUB:
@@ -109,10 +128,15 @@ SKIP_SUB:
         JPOS    LOOP_SUB
         RETURN
 
+
+
+
+
 ; === DATA SECTION ===
 SWITCH_STATE:   DW   0
 KEYS:           EQU  XXX
 LED_PTR:        DW   0
+Cur_LED         DW   &H22
 
 END:
 NOP
