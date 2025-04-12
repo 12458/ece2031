@@ -38,6 +38,7 @@ AdderLoop:                      ; Wait for KEY1 to be pressed
         STORE   AdderInput           ; Store User input
         LOAD    AdderSum             ; Load current running sum (does nothing on first loop)
         ADD     AdderInput           ; Add input value to running Sum
+        AND     10bits                 ; Mask relevant bits 
         STORE   AdderSum
         OUT     LEDToggle       ; Display new sum on LEDs
         JUMP    AdderLoop       ; Jump to InputLoop to wait for next value
@@ -276,6 +277,8 @@ NegativeDelta:  DW -32
 
 AdderSum:       DW 0
 AdderInput:     DW 0
+
+10bits:         DW 1023
 
 
 
