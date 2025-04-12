@@ -13,7 +13,7 @@ Initialization:
                          JPOS Demo1_Loop
                          LOAD KeyInput
                          AND B1
-                         JPOS Demo2_Loop
+                         JPOS Demo2
                          
                          JUMP Initialization
                          
@@ -27,20 +27,24 @@ Initialization:
 Demo1_Loop: 
                          LOADI 0
                          OUT LEDToggle ; Turn off all LEDs
+                         LOADI 255
+                         OUT LEDGlobal
                          
 AdderLoop: ; Wait for KEY1 to be pressed
                          IN KeyIO
                          STORE KeyInput
+                         
+                         JZERO AdderLoop
+                         
                          AND B2
                          JPOS Initialization
+                         
                          LOAD KeyInput
                          AND B0
                          JZERO AdderLoop ; Only continue if KEY1 is pressed
                          
                          IN Switches ; Grab input value from Switches
-                         STORE AdderInput ; Store User input
-                         LOAD AdderSum ; Load current running sum (does nothing on first loop)
-                         ADD AdderInput ; Add input value to running Sum
+                         ADD AdderSum ; Load current running sum (does nothing on first loop)
                          AND 10bits ; Mask relevant bits 
                          STORE AdderSum
                          OUT LEDToggle ; Display new sum on LEDs
@@ -52,6 +56,12 @@ AdderLoop: ; Wait for KEY1 to be pressed
                          ; ██ ██ █████ ██ ████ ██ ██ ██ █████ ██ ██ ██ ██ ██ ██████ 
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██████ ███████ ██ ██ ██████ ███████ ███████ ██████ ██████ ██ 
+Demo2: 
+                         LOADI 1023
+                         OUT LEDToggle
+                         LOADI 255
+                         OUT LEDGlobal
+                         
 Demo2_Loop: ; Wait for a key to be pressed
                          IN KeyIO
                          STORE KeyInput
@@ -59,14 +69,18 @@ Demo2_Loop: ; Wait for a key to be pressed
                          JZERO Demo2_Loop ; Only continue if a key is pressed
                          
                          LOAD KeyInput
-                         AND B0
+                         AND B2
                          JPOS Initialization
+                         
                          LOAD KeyInput
-                         AND B1
+                         AND B0
                          JPOS Individual_Loop
+                         
                          LOAD KeyInput
-                         AND B2 
+                         AND B1 
                          JPOS Global_Loop
+                         
+                         JUMP Demo2_Loop
                          
                          
                          
@@ -82,13 +96,15 @@ Global_Loop:
                          JZERO Global_Loop
                          
                          LOAD KeyInput
+                         AND B2
+                         JPOS Demo2_Loop
+                         
+                         LOAD KeyInput
                          AND B0
-                         JPOS Initialization
+                         JPOS IncreaseGlobal
+                         
                          LOAD KeyInput
                          AND B1
-                         JPOS IncreaseGlobal
-                         LOAD KeyInput
-                         AND B2
                          JPOS DecreaseGlobal
                          
                          JUMP Global_Loop
@@ -105,7 +121,7 @@ IncreaseGlobal:
                          STORE NewBright
                          
                          SUB 255
-                         JPOS Assign255
+                         JPOS Assign255 ; Check for overflow
                          
                          LOAD NewBright
                          OUT LEDGlobal
@@ -124,7 +140,7 @@ DecreaseGlobal:
                          ADD NegativeDelta
                          STORE NewBright
                          
-                         JNEG AssignZero
+                         JNEG AssignZero ; Check for underflow
                          
                          LOAD NewBright
                          OUT LEDGlobal
@@ -144,14 +160,17 @@ Individual_Loop:
                          JZERO Individual_Loop
                          
                          LOAD KeyInput
-                         AND B0
-                         JPOS Initialization
+                         AND B2
+                         JPOS Demo2_Loop
+                         
                          LOAD KeyInput
-                         AND B1
+                         AND B0
                          JPOS IncreaseIndividual
                          LOAD KeyInput
-                         AND B2
+                         
+                         AND B1
                          JPOS DecreaseIndividual
+                         
                          JUMP Individual_Loop
                          
                          
@@ -165,7 +184,7 @@ Individual_Loop:
 IncreaseIndividual: 
                          IN Switches
                          STORE Input
-                         LOADI LEDBaseADDR
+                         LOAD LEDBaseADDR
                          STORE CurLEDADDR
                          
 IncreaseIndividual_Loop: 
@@ -218,9 +237,10 @@ Assign255:
                          ; ██████ ███████ ██████ ██ ██ ███████ ██ ██ ███████ ███████ ██ ██ ████ ██████ ██ ████ ██ ██████ ██████ ██ ██ ███████ 
 DecreaseIndividual: 
                          IN Switches
-                         STORE Input
-                         LOADI LEDBaseADDR
-                         STORE CurLEDADDR
+                         STORE Input ; get current switch state
+                         
+                         LOAD LEDBaseADDR
+                         STORE CurLEDADDR ; reset current led address to base
                          
 DecreaseIndividual_Loop: 
                          LOAD Input
