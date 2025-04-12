@@ -1,0 +1,143 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 902D; --         IN      KeyIO
+0001: 107D; --         STORE   KeyInput
+0002: 4000; --         JZERO   Initialization
+0003: 487E; --         AND     B0
+0004: 3808; --         JPOS    Demo1_Loop
+0005: 487F; --         AND     B1
+0006: 3816; --         JPOS    Demo2_Loop
+0007: 2800; --         JUMP    Initialization
+0008: B800; --         LOADI 0
+0009: 9820; --         OUT     LEDToggle       ; Turn off all LEDs
+000A: 907D; --         IN      KeyInput
+000B: 4880; --         AND     B2
+000C: 3800; --         JPOS    Initialization
+000D: 487E; --         AND     B0
+000E: 400A; --         JZERO   AdderLoop      ; Only continue if KEY1 is pressed
+000F: 9000; --         IN      Switches        ; Grab input value from Switches
+0010: 1084; --         STORE   AdderInput           ; Store User input
+0011: 0883; --         LOAD    AdderSum             ; Load current running sum (does nothing on first loop)
+0012: 1884; --         ADD     AdderInput           ; Add input value to running Sum
+0013: 1083; --         STORE   AdderSum
+0014: 9820; --         OUT     LEDToggle       ; Display new sum on LEDs
+0015: 280A; --         JUMP    AdderLoop       ; Jump to InputLoop to wait for next value
+0016: 902D; --         IN      KeyIO
+0017: 107D; --         STORE   KeyInput
+0018: 4016; --         JZERO   Demo2_Loop      ; Only continue if a key is pressed
+0019: 487E; --         AND     B0
+001A: 3800; --         JPOS    Initialization
+001B: 487F; --         AND     B1
+001C: 3838; --         JPOS    Individual_Loop
+001D: 4880; --         AND     B2    
+001E: 381F; --         JPOS    Global_Loop
+001F: 902D; --         IN      KeyIO
+0020: 107D; --         STORE   KeyInput
+0021: 401F; --         JZERO   Global_Loop
+0022: 487E; --         AND     B0
+0023: 3800; --         JPOS    Initialization
+0024: 487F; --         AND     B1
+0025: 3829; --         JPOS    IncreaseGlobal
+0026: 4880; --         AND     B2
+0027: 3831; --         JPOS    DecreaseGlobal
+0028: 281F; --         JUMP    Global_Loop
+0029: 9021; --         IN      LEDGlobal
+002A: 1881; --         ADD     PositiveDelta
+002B: 107C; --         STORE   NewBright
+002C: 20FF; --         SUB     255
+002D: 385B; --         JPOS    Assign255
+002E: 087C; --         LOAD    NewBright
+002F: 9821; --         OUT     LEDGlobal
+0030: 281F; --         JUMP    Global_Loop
+0031: 9021; --         IN      LEDGlobal
+0032: 1882; --         ADD     NegativeDelta
+0033: 107C; --         STORE   NewBright
+0034: 3077; --         JNEG    AssignZero
+0035: 087C; --         LOAD    NewBright
+0036: 9821; --         OUT     LEDGlobal
+0037: 281F; --         JUMP    Global_Loop
+0038: 902D; --         IN      KeyIO
+0039: 107D; --         STORE   KeyInput
+003A: 4038; --         JZERO   Individual_Loop
+003B: 487E; --         AND     B0
+003C: 487F; --         AND     B1
+003D: 3841; --         JPOS    IncreaseIndividual
+003E: 4880; --         AND     B2
+003F: 385E; --         JPOS    DecreaseIndividual
+0040: 2838; --         JUMP    Individual_Loop
+0041: 9000; --         IN      Switches
+0042: 107A; --         STORE   Input
+0043: B822; --         LOADI   LEDBaseADDR
+0044: 107B; --         STORE   CurLEDADDR
+0045: 087A; --         LOAD    Input
+0046: 4801; --         AND     1
+0047: 3852; --         JPOS    BrightnessUp    ; if LSB is 1, edit LED
+0048: 087A; --         LOAD    Input
+0049: 6011; --         SHIFT   -1              ; Shift switch input to operate on next LED bit
+004A: 107A; --         STORE   Input
+004B: 087B; --         LOAD    CurLEDADDR
+004C: 6801; --         ADDI    1               ; Iterate LED
+004D: 107B; --         STORE   CurLEDADDR
+004E: 0800; --         LOAD
+004F: 6FD4; --         ADDI    -44             ; Check condition 0x2C
+0050: 3845; --         JPOS    IncreaseIndividual_Loop
+0051: 2838; --         JUMP    Individual_Loop
+0052: 087B; --         LOAD    CurLEDADDR
+0053: 907B; --         IN      CurLEDADDR      ; Read current brightness of this LED
+0054: 1881; --         ADD     PositiveDelta
+0055: 107C; --         STORE   NewBright       ; Increase brightness
+0056: 20FF; --         SUB     255
+0057: 385B; --         JPOS    Assign255       ; reassign overflows
+0058: 087C; --         LOAD    NewBright
+0059: 987B; --         OUT     CurLEDADDR      ; Write new brightness to the LED
+005A: 8800; --         RETURN
+005B: B8FF; --         LOADI   255
+005C: 107C; --         STORE   NewBright
+005D: 8800; --         RETURN
+005E: 9000; --         IN      Switches
+005F: 107A; --         STORE   Input
+0060: B822; --         LOADI   LEDBaseADDR
+0061: 107B; --         STORE   CurLEDADDR
+0062: 087A; --         LOAD    Input
+0063: 4801; --         AND     1
+0064: 386F; --         JPOS    BrightnessDown  ; if LSB is 1, edit LED
+0065: 087A; --         LOAD    Input
+0066: 6011; --         SHIFT   -1              ; Shift switch input to operate on next LED bit
+0067: 107A; --         STORE   Input
+0068: 087B; --         LOAD    CurLEDADDR
+0069: 6801; --         ADDI    1               ; Iterate LED
+006A: 107B; --         STORE   CurLEDADDR
+006B: 0800; --         LOAD
+006C: 6FD4; --         ADDI    -44             ; Check if last LED has been operated on
+006D: 3862; --         JPOS    DecreaseIndividual_Loop
+006E: 8800; --         RETURN
+006F: 087B; --         LOAD    CurLEDADDR
+0070: 907B; --         IN      CurLEDADDR      ; Read current brightness of this LED
+0071: 1882; --         ADD     NegativeDelta
+0072: 107C; --         STORE   NewBright       ; Increase brightness
+0073: 3077; --         JNEG    AssignZero      ; reassign overflows
+0074: 087C; --         LOAD    NewBright
+0075: 987B; --         OUT     CurLEDADDR      ; Write new brightness to the LED
+0076: 8800; --         RETURN
+0077: B800; --         LOADI   0
+0078: 107C; --         STORE   NewBright
+0079: 8800; --         RETURN
+007A: 0000; -- Input:          DW 0
+007B: 0000; -- CurLEDADDR:     DW 0
+007C: 0000; -- NewBright:      DW 0
+007D: 0000; -- KeyInput:       DW 0
+007E: 0001; -- B0:             DW 1
+007F: 0002; -- B1:             DW 2
+0080: 0004; -- B2:             DW 4
+0081: 0020; -- PositiveDelta:  DW 32
+0082: FFE0; -- NegativeDelta:  DW -32
+0083: 0000; -- AdderSum:       DW 0
+0084: 0000; -- AdderInput:     DW 0
+[0085..07FF] : 0000; -- [empty memory]
+END;
+
