@@ -189,7 +189,7 @@ IncreaseIndividual:
                          
 IncreaseIndividual_Loop: 
                          LOAD Input
-                         AND 1
+                         AND B0
                          JPOS BrightnessUp ; if LSB is 1, edit LED
                          
                          LOAD Input
@@ -244,7 +244,7 @@ DecreaseIndividual:
                          
 DecreaseIndividual_Loop: 
                          LOAD Input
-                         AND 1
+                         AND B0
                          JPOS BrightnessDown ; if LSB is 1, edit LED
                          
                          LOAD Input
