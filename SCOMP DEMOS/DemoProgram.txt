@@ -13,7 +13,7 @@ Initialization:
         JPOS    Demo1_Loop
         LOAD    KeyInput
         AND     B1
-        JPOS    Demo2_Loop
+        JPOS    Demo2
         
         JUMP    Initialization
 
@@ -54,6 +54,12 @@ AdderLoop:                      ; Wait for KEY1 to be pressed
 ; ██   ██ █████   ██ ████ ██ ██    ██      █████      ██      ██    ██ ██    ██ ██████  
 ; ██   ██ ██      ██  ██  ██ ██    ██     ██          ██      ██    ██ ██    ██ ██      
 ; ██████  ███████ ██      ██  ██████      ███████     ███████  ██████   ██████  ██ 
+Demo2:
+        LOADI   1023
+        OUT     LEDToggle
+        LOADI   255
+        OUT     LEDGlobal
+
 Demo2_Loop:                      ; Wait for a key to be pressed
         IN      KeyIO
         STORE   KeyInput
@@ -108,9 +114,6 @@ Global_Loop:
 ; ██ ██  ██ ██ ██      ██   ██ ██      ██   ██      ██ ██          ██    ██ ██      ██    ██ ██   ██ ██   ██ ██      
 ; ██ ██   ████  ██████ ██   ██ ███████ ██   ██ ███████ ███████      ██████  ███████  ██████  ██████  ██   ██ ███████
 IncreaseGlobal:
-        LOADI   1023
-        OUT     LEDToggle
-
         IN      LEDGlobal
         ADD     PositiveDelta
         STORE   NewBright
@@ -131,9 +134,6 @@ IncreaseGlobal:
 ; ██   ██ ██      ██      ██   ██ ██      ██   ██      ██ ██          ██    ██ ██      ██    ██ ██   ██ ██   ██ ██      
 ; ██████  ███████  ██████ ██   ██ ███████ ██   ██ ███████ ███████      ██████  ███████  ██████  ██████  ██   ██ ███████
 DecreaseGlobal:
-        LOADI   1023
-        OUT     LEDToggle
-
         IN      LEDGlobal
         ADD     NegativeDelta
         STORE   NewBright
@@ -182,7 +182,7 @@ Individual_Loop:
 IncreaseIndividual:
         IN      Switches
         STORE   Input
-        LOAD   LEDBaseADDR
+        LOAD    LEDBaseADDR
         STORE   CurLEDADDR
 
 IncreaseIndividual_Loop:
