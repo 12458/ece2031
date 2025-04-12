@@ -25,10 +25,13 @@ Initialization:
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██████ ███████ ██ ██ ██████ ██ ███████ ██████ ██████ ██ 
 Demo1_Loop: 
-                         LOADI 0
+						 LOADI 0
                          OUT LEDToggle ; Turn off all LEDs
                          LOADI 255
                          OUT LEDGlobal
+AdderLoop_pre: 
+                         IN KeyIO
+						 JPOS AdderLoop_pre		 
                          
 AdderLoop: ; Wait for KEY1 to be pressed
                          IN KeyIO
@@ -48,7 +51,7 @@ AdderLoop: ; Wait for KEY1 to be pressed
                          AND 10bits ; Mask relevant bits 
                          STORE AdderSum
                          OUT LEDToggle ; Display new sum on LEDs
-                         JUMP AdderLoop ; Jump to InputLoop to wait for next value
+                         JUMP AdderLoop_pre ; Jump to InputLoop to wait for next value
                          
                          
                          ; ██████ ███████ ███ ███ ██████ ██████ ██ ██████ ██████ ██████ 
