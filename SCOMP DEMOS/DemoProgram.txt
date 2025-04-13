@@ -215,7 +215,7 @@ IncreaseIndividual:
 IncreaseIndividual_Loop:
         LOAD    Input
         AND     1
-        JZERO   IndividualBrighnessSkip    ; Do not edit unselected LEDs
+        JZERO   SkipIncrease    ; Do not edit unselected LEDs
 
 BrightnessUp:
         LOAD    CurLEDADDR
@@ -225,7 +225,7 @@ BrightnessUp:
         STORE   NewBright       ; Increase brightness
 
         SUB     256
-        JPNEG   SkipOverflowAssignment       ; reassign overflows
+        JNEG   SkipOverflowAssignment       ; reassign overflows
 
         LOADI   255
         STORE   NewBright

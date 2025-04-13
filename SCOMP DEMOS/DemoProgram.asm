@@ -25,13 +25,14 @@ Initialization:
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██████ ███████ ██ ██ ██████ ██ ███████ ██████ ██████ ██ 
 Demo1_Loop: 
-						 LOADI 0
+Demo1_Release: 
+                         IN KeyIO
+                         JPOS Demo1_Release ; Loop until KeyIO is 0
+                         
+                         LOADI 0
                          OUT LEDToggle ; Turn off all LEDs
                          LOADI 255
                          OUT LEDGlobal
-AdderLoop_pre: 
-                         IN KeyIO
-						 JPOS AdderLoop_pre		 
                          
 AdderLoop: ; Wait for KEY1 to be pressed
                          IN KeyIO
@@ -51,7 +52,7 @@ AdderLoop: ; Wait for KEY1 to be pressed
                          AND 10bits ; Mask relevant bits 
                          STORE AdderSum
                          OUT LEDToggle ; Display new sum on LEDs
-                         JUMP AdderLoop_pre ; Jump to InputLoop to wait for next value
+                         JUMP AdderLoop ; Jump to InputLoop to wait for next value
                          
                          
                          ; ██████ ███████ ███ ███ ██████ ██████ ██ ██████ ██████ ██████ 
@@ -60,6 +61,10 @@ AdderLoop: ; Wait for KEY1 to be pressed
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██████ ███████ ██ ██ ██████ ███████ ███████ ██████ ██████ ██ 
 Demo2: 
+Demo2_Release: 
+                         IN KeyIO
+                         JPOS Demo2_Release ; Loop until KeyIO is 0
+                         
                          LOADI 1023
                          OUT LEDToggle
                          LOADI 255
@@ -93,6 +98,10 @@ Demo2_Loop: ; Wait for a key to be pressed
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██████ ███████ ██████ ██████ ██ ██ ███████ ███████ ██████ ██████ ██
 Global_Loop: 
+Global_Release: 
+                         IN KeyIO
+                         JPOS Global_Release ; Loop until KeyIO is 0
+                         
                          IN KeyIO
                          STORE KeyInput
                          
@@ -123,9 +132,13 @@ IncreaseGlobal:
                          ADD PositiveDelta
                          STORE NewBright
                          
-                         SUB 255
-                         JPOS Assign255 ; Check for overflow
+                         SUB 256
+                         JNEG SkipOverFlow_Global ; Check for overflow
                          
+                         LOADI 255
+                         STORE NewBright
+                         
+SkipOverFlow_Global: 
                          LOAD NewBright
                          OUT LEDGlobal
                          JUMP Global_Loop
@@ -143,8 +156,13 @@ DecreaseGlobal:
                          ADD NegativeDelta
                          STORE NewBright
                          
-                         JNEG AssignZero ; Check for underflow
+                         ADD 1
+                         JPOS SkipUnderFlow_Global ; Check for underflow
                          
+                         LOADI 0
+                         STORE NewBright
+                         
+SkipUnderFlow_Global: 
                          LOAD NewBright
                          OUT LEDGlobal
                          JUMP Global_Loop
@@ -157,6 +175,10 @@ DecreaseGlobal:
                          ; ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ 
                          ; ██ ██ ████ ██████ ██ ████ ██ ██████ ██████ ██ ██ ███████ ███████ ██████ ██████ ██ 
 Individual_Loop: 
+Individual_Release: 
+                         IN KeyIO
+                         JPOS Individual_Release ; Loop until KeyIO is 0
+                         
                          IN KeyIO
                          STORE KeyInput
                          
@@ -192,9 +214,28 @@ IncreaseIndividual:
                          
 IncreaseIndividual_Loop: 
                          LOAD Input
-                         AND B0
-                         JPOS BrightnessUp ; if LSB is 1, edit LED
+                         AND 1
+                         JZERO SkipIncrease ; Do not edit unselected LEDs
                          
+BrightnessUp: 
+                         LOAD CurLEDADDR
+                         IN CurLEDADDR ; Read current brightness of this LED
+                         
+                         ADD PositiveDelta
+                         STORE NewBright ; Increase brightness
+                         
+                         SUB 256
+                         JNEG SkipOverflowAssignment ; reassign overflows
+                         
+                         LOADI 255
+                         STORE NewBright
+                         
+SkipOverflowAssignment: 
+                         LOAD NewBright
+                         OUT CurLEDADDR ; Write new brightness to the LED
+                         
+                         
+SkipIncrease: 
                          LOAD Input
                          SHIFT -1 ; Shift switch input to operate on next LED bit
                          STORE Input
@@ -207,25 +248,6 @@ IncreaseIndividual_Loop:
                          ADDI -44 ; Check condition 0x2C
                          JPOS IncreaseIndividual_Loop
                          JUMP Individual_Loop
-                         
-BrightnessUp: 
-                         LOAD CurLEDADDR
-                         IN CurLEDADDR ; Read current brightness of this LED
-                         
-                         ADD PositiveDelta
-                         STORE NewBright ; Increase brightness
-                         
-                         SUB 255
-                         JPOS Assign255 ; reassign overflows
-                         
-                         LOAD NewBright
-                         OUT CurLEDADDR ; Write new brightness to the LED
-                         RETURN
-                         
-Assign255: 
-                         LOADI 255
-                         STORE NewBright
-                         RETURN
                          
                          
                          
@@ -247,9 +269,26 @@ DecreaseIndividual:
                          
 DecreaseIndividual_Loop: 
                          LOAD Input
-                         AND B0
-                         JPOS BrightnessDown ; if LSB is 1, edit LED
+                         AND 1
+                         JZERO SkipDecrease ; if LSB is 1, edit LED
                          
+                         LOAD CurLEDADDR
+                         IN CurLEDADDR ; Read current brightness of this LED
+                         
+                         ADD NegativeDelta
+                         STORE NewBright ; Increase brightness
+                         
+                         ADD 1
+                         JPOS SkipUnderflowAssignment ; reassign overflows
+                         
+                         LOADI 0
+                         STORE NewBright
+                         
+SkipUnderflowAssignment: 
+                         LOAD NewBright
+                         OUT CurLEDADDR ; Write new brightness to the LED
+                         
+SkipDecrease: 
                          LOAD Input
                          SHIFT -1 ; Shift switch input to operate on next LED bit
                          STORE Input
@@ -261,25 +300,7 @@ DecreaseIndividual_Loop:
                          
                          ADDI -44 ; Check if last LED has been operated on
                          JPOS DecreaseIndividual_Loop
-                         RETURN
-                         
-BrightnessDown: 
-                         LOAD CurLEDADDR
-                         IN CurLEDADDR ; Read current brightness of this LED
-                         
-                         ADD NegativeDelta
-                         STORE NewBright ; Increase brightness
-                         
-                         JNEG AssignZero ; reassign overflows
-                         
-                         LOAD NewBright
-                         OUT CurLEDADDR ; Write new brightness to the LED
-                         RETURN
-                         
-AssignZero: 
-                         LOADI 0
-                         STORE NewBright
-                         RETURN
+                         JUMP Individual_Loop
                          
                          
                          
