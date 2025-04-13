@@ -1,0 +1,88 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 902D; --         IN      KeyIO
+0001: 1045; --         STORE   KeyInput
+0002: 4000; --         JZERO   Individual_Loop
+0003: 902D; --         In      KeyIO
+0004: 3803; --         JPOS    IndividualRelease
+0005: 0845; --         LOAD    KeyInput
+0006: 4846; --         AND     B0
+0007: 380C; --         JPOS    IncreaseIndividual
+0008: 0845; --         LOAD    KeyInput
+0009: 4847; --         AND     B1
+000A: 3827; --         JPOS    DecreaseIndividual
+000B: 2800; --         JUMP    Individual_Loop
+000C: 9000; --         IN      Switches
+000D: 1042; --         STORE   Input
+000E: 0822; --         LOAD    LEDBaseADDR
+000F: 1043; --         STORE   CurLEDADDR
+0010: 0842; --         LOAD    Input
+0011: 4801; --         AND     1
+0012: 401D; --         JZERO   SkipIncrease    ; Do not edit unselected LEDs
+0013: 0843; --         LOAD    CurLEDADDR
+0014: 9043; --         IN      CurLEDADDR      ; Read current brightness of this LED
+0015: 1849; --         ADD     PositiveDelta
+0016: 1044; --         STORE   NewBright       ; Increase brightness
+0017: 2100; --         SUB     256
+0018: 301B; --         JNEG   SkipOverflowAssignment       ; reassign overflows
+0019: B8FF; --         LOADI   255
+001A: 1044; --         STORE   NewBright
+001B: 0844; --         LOAD    NewBright
+001C: 9843; --         OUT     CurLEDADDR      ; Write new brightness to the LED
+001D: 0842; --         LOAD    Input
+001E: 6011; --         SHIFT   -1              ; Shift switch input to operate on next LED bit
+001F: 1042; --         STORE   Input
+0020: 0843; --         LOAD    CurLEDADDR
+0021: 6801; --         ADDI    1               ; Iterate LED
+0022: 1043; --         STORE   CurLEDADDR
+0023: 0800; --         LOAD
+0024: 6FD4; --         ADDI    -44             ; Check condition 0x2C
+0025: 3810; --         JPOS    IncreaseIndividual_Loop
+0026: 2800; --         JUMP    Individual_Loop
+0027: 9000; --         IN      Switches
+0028: 1042; --         STORE   Input           ; get current switch state
+0029: 0822; --         LOAD    LEDBaseADDR
+002A: 1043; --         STORE   CurLEDADDR      ; reset current led address to base
+002B: 0842; --         LOAD    Input
+002C: 4801; --         AND     1
+002D: 4038; --         JZERO   SkipDecrease  ; if LSB is 1, edit LED
+002E: 0843; --         LOAD    CurLEDADDR
+002F: 9043; --         IN      CurLEDADDR      ; Read current brightness of this LED
+0030: 184A; --         ADD     NegativeDelta
+0031: 1044; --         STORE   NewBright       ; Increase brightness
+0032: 1801; --         ADD     1
+0033: 3836; --         JPOS    SkipUnderflowAssignment      ; reassign overflows
+0034: B800; --         LOADI   0
+0035: 1044; --         STORE   NewBright
+0036: 0844; --         LOAD    NewBright
+0037: 9843; --         OUT     CurLEDADDR      ; Write new brightness to the LED
+0038: 0842; --         LOAD    Input
+0039: 6011; --         SHIFT   -1              ; Shift switch input to operate on next LED bit
+003A: 1042; --         STORE   Input
+003B: 0843; --         LOAD    CurLEDADDR
+003C: 6801; --         ADDI    1               ; Iterate LED
+003D: 1043; --         STORE   CurLEDADDR
+003E: 0800; --         LOAD
+003F: 6FD4; --         ADDI    -44             ; Check if last LED has been operated on
+0040: 382B; --         JPOS    DecreaseIndividual_Loop
+0041: 2800; --         JUMP    Individual_Loop
+0042: 0000; -- Input:          DW 0
+0043: 0000; -- CurLEDADDR:     DW 0
+0044: 0000; -- NewBright:      DW 0
+0045: 0000; -- KeyInput:       DW 0
+0046: 0001; -- B0:             DW 1
+0047: 0002; -- B1:             DW 2
+0048: 0004; -- B2:             DW 4
+0049: 0020; -- PositiveDelta:  DW 32
+004A: FFE0; -- NegativeDelta:  DW -32
+004B: 0000; -- AdderSum:       DW 0
+004C: 0000; -- AdderInput:     DW 0
+004D: 03FF; -- 10bits:         DW 1023
+[004E..07FF] : 0000; -- [empty memory]
+END;
+
