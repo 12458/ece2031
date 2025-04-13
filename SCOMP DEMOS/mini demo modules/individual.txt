@@ -1,0 +1,181 @@
+; ██ ███    ██ ██████  ██ ██    ██ ██ ██████  ██    ██  █████  ██          ██       ██████   ██████  ██████  
+; ██ ████   ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ██   ██ ██          ██      ██    ██ ██    ██ ██   ██ 
+; ██ ██ ██  ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ███████ ██          ██      ██    ██ ██    ██ ██████  
+; ██ ██  ██ ██ ██   ██ ██  ██  ██  ██ ██   ██ ██    ██ ██   ██ ██          ██      ██    ██ ██    ██ ██      
+; ██ ██   ████ ██████  ██   ████   ██ ██████   ██████  ██   ██ ███████     ███████  ██████   ██████  ██    
+Individual_Loop:
+
+        IN      KeyIO
+        STORE   KeyInput
+
+        JZERO   Individual_Loop
+
+IndividualRelease:
+        In      KeyIO
+        JPOS    IndividualRelease
+
+        LOAD    KeyInput
+        AND     B0
+        JPOS    IncreaseIndividual
+
+        LOAD    KeyInput
+        AND     B1
+        JPOS    DecreaseIndividual
+        
+        JUMP    Individual_Loop
+
+
+
+
+; ██ ███    ██  ██████ ██████  ███████  █████  ███████ ███████     ██ ███    ██ ██████  ██ ██    ██ ██ ██████  ██    ██  █████  ██      
+; ██ ████   ██ ██      ██   ██ ██      ██   ██ ██      ██          ██ ████   ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ██   ██ ██      
+; ██ ██ ██  ██ ██      ██████  █████   ███████ ███████ █████       ██ ██ ██  ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ███████ ██      
+; ██ ██  ██ ██ ██      ██   ██ ██      ██   ██      ██ ██          ██ ██  ██ ██ ██   ██ ██  ██  ██  ██ ██   ██ ██    ██ ██   ██ ██      
+; ██ ██   ████  ██████ ██   ██ ███████ ██   ██ ███████ ███████     ██ ██   ████ ██████  ██   ████   ██ ██████   ██████  ██   ██ ███████ 
+IncreaseIndividual:
+        IN      Switches
+        STORE   Input
+        LOAD    LEDBaseADDR
+        STORE   CurLEDADDR
+
+IncreaseIndividual_Loop:
+        LOAD    Input
+        AND     1
+        JZERO   SkipIncrease    ; Do not edit unselected LEDs
+
+BrightnessUp:
+        LOAD    CurLEDADDR
+        IN      CurLEDADDR      ; Read current brightness of this LED
+
+        ADD     PositiveDelta
+        STORE   NewBright       ; Increase brightness
+
+        SUB     256
+        JNEG   SkipOverflowAssignment       ; reassign overflows
+
+        LOADI   255
+        STORE   NewBright
+
+SkipOverflowAssignment:
+        LOAD    NewBright
+        OUT     CurLEDADDR      ; Write new brightness to the LED
+
+
+SkipIncrease:
+        LOAD    Input
+        SHIFT   -1              ; Shift switch input to operate on next LED bit
+        STORE   Input
+
+        LOAD    CurLEDADDR
+        ADDI    1               ; Iterate LED
+        STORE   CurLEDADDR
+        LOAD
+
+        ADDI    -44             ; Check condition 0x2C
+        JPOS    IncreaseIndividual_Loop
+        JUMP    Individual_Loop
+
+
+
+
+
+
+
+; ██████  ███████  ██████ ██████  ███████  █████  ███████ ███████     ██ ███    ██ ██████  ██ ██    ██ ██ ██████  ██    ██  █████  ██      
+; ██   ██ ██      ██      ██   ██ ██      ██   ██ ██      ██          ██ ████   ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ██   ██ ██      
+; ██   ██ █████   ██      ██████  █████   ███████ ███████ █████       ██ ██ ██  ██ ██   ██ ██ ██    ██ ██ ██   ██ ██    ██ ███████ ██      
+; ██   ██ ██      ██      ██   ██ ██      ██   ██      ██ ██          ██ ██  ██ ██ ██   ██ ██  ██  ██  ██ ██   ██ ██    ██ ██   ██ ██      
+; ██████  ███████  ██████ ██   ██ ███████ ██   ██ ███████ ███████     ██ ██   ████ ██████  ██   ████   ██ ██████   ██████  ██   ██ ███████                           
+DecreaseIndividual:
+        IN      Switches
+        STORE   Input           ; get current switch state
+
+        LOAD    LEDBaseADDR
+        STORE   CurLEDADDR      ; reset current led address to base
+
+DecreaseIndividual_Loop:
+        LOAD    Input
+        AND     1
+        JZERO   SkipDecrease  ; if LSB is 1, edit LED
+
+        LOAD    CurLEDADDR
+        IN      CurLEDADDR      ; Read current brightness of this LED
+
+        ADD     NegativeDelta
+        STORE   NewBright       ; Increase brightness
+
+        ADD     1
+        JPOS    SkipUnderflowAssignment      ; reassign overflows
+
+        LOADI   0
+        STORE   NewBright
+
+SkipUnderflowAssignment:
+        LOAD    NewBright
+        OUT     CurLEDADDR      ; Write new brightness to the LED
+
+SkipDecrease:
+        LOAD    Input
+        SHIFT   -1              ; Shift switch input to operate on next LED bit
+        STORE   Input
+
+        LOAD    CurLEDADDR
+        ADDI    1               ; Iterate LED
+        STORE   CurLEDADDR
+        LOAD
+
+        ADDI    -44             ; Check if last LED has been operated on
+        JPOS    DecreaseIndividual_Loop
+        JUMP    Individual_Loop
+
+
+
+
+
+
+
+
+
+
+
+
+; ██    ██  █████  ██████  ██  █████  ██████  ██      ███████ ███████ 
+; ██    ██ ██   ██ ██   ██ ██ ██   ██ ██   ██ ██      ██      ██      
+; ██    ██ ███████ ██████  ██ ███████ ██████  ██      █████   ███████ 
+;  ██  ██  ██   ██ ██   ██ ██ ██   ██ ██   ██ ██      ██           ██ 
+;   ████   ██   ██ ██   ██ ██ ██   ██ ██████  ███████ ███████ ███████
+
+Input:          DW 0
+CurLEDADDR:     DW 0
+NewBright:      DW 0
+KeyInput:       DW 0
+
+B0:             DW 1
+B1:             DW 2
+B2:             DW 4
+
+PositiveDelta:  DW 32
+NegativeDelta:  DW -32
+
+AdderSum:       DW 0
+AdderInput:     DW 0
+
+10bits:         DW 1023
+
+
+
+
+
+; ██  ██████       █████  ██████  ██████  ██████  ███████ ███████ ███████ ███████ ███████ 
+; ██ ██    ██     ██   ██ ██   ██ ██   ██ ██   ██ ██      ██      ██      ██      ██      
+; ██ ██    ██     ███████ ██   ██ ██   ██ ██████  █████   ███████ ███████ █████   ███████ 
+; ██ ██    ██     ██   ██ ██   ██ ██   ██ ██   ██ ██           ██      ██ ██           ██ 
+; ██  ██████      ██   ██ ██████  ██████  ██   ██ ███████ ███████ ███████ ███████ ███████
+
+Switches:       EQU 000
+KeyIO:          EQU &H02D
+LEDToggle:      EQU &H020
+LEDGlobal:      EQU &H021
+
+LEDBaseADDR:    EQU &H022
+

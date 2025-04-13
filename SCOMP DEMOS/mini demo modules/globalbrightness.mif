@@ -1,0 +1,54 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 902D; --         IN      KeyIO
+0001: 1023; --         STORE   KeyInput
+0002: 4000; --         JZERO   Global_Loop
+0003: 902D; --         IN      KeyIO
+0004: 3803; --         JPOS    Global_Release
+0005: 0823; --         LOAD    KeyInput
+0006: 4824; --         AND     B0
+0007: 380C; --         JPOS    IncreaseGlobal
+0008: 0823; --         LOAD    KeyInput
+0009: 4825; --         AND     B1
+000A: 3816; --         JPOS    DecreaseGlobal
+000B: 2800; --         JUMP    Global_Loop
+000C: 9021; --         IN      LEDGlobal
+000D: 1827; --         ADD     PositiveDelta
+000E: 1022; --         STORE   NewBright
+000F: 2100; --         SUB     256
+0010: 3013; --         JNEG    SkipOverFlow_Global       ; Check for overflow
+0011: B8FF; --         LOADI   255
+0012: 1022; --         STORE   NewBright
+0013: 0822; --         LOAD    NewBright
+0014: 9821; --         OUT     LEDGlobal
+0015: 2800; --         JUMP    Global_Loop
+0016: 9021; --         IN      LEDGlobal
+0017: 1828; --         ADD     NegativeDelta
+0018: 1022; --         STORE   NewBright
+0019: 1801; --         ADD     1
+001A: 381D; --         JPOS    SkipUnderFlow_Global      ; Check for underflow
+001B: B800; --         LOADI   0
+001C: 1022; --         STORE   NewBright
+001D: 0822; --         LOAD    NewBright
+001E: 9821; --         OUT     LEDGlobal
+001F: 2800; --         JUMP    Global_Loop
+0020: 0000; -- Input:          DW 0
+0021: 0000; -- CurLEDADDR:     DW 0
+0022: 0000; -- NewBright:      DW 0
+0023: 0000; -- KeyInput:       DW 0
+0024: 0001; -- B0:             DW 1
+0025: 0002; -- B1:             DW 2
+0026: 0004; -- B2:             DW 4
+0027: 0020; -- PositiveDelta:  DW 32
+0028: FFE0; -- NegativeDelta:  DW -32
+0029: 0000; -- AdderSum:       DW 0
+002A: 0000; -- AdderInput:     DW 0
+002B: 03FF; -- 10bits:         DW 1023
+[002C..07FF] : 0000; -- [empty memory]
+END;
+
