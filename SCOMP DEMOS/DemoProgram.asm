@@ -34,11 +34,14 @@ Demo1_Release:
                          LOADI 255
                          OUT LEDGlobal
                          
-AdderLoop: ; Wait for KEY1 to be pressed
+AdderLoop: 
                          IN KeyIO
                          STORE KeyInput
                          
                          JZERO AdderLoop
+Demo1_Release2: 
+                         IN KeyIO
+                         JPOS Demo1_Release2 ; wait for selected key to be released before proceeding
                          
                          AND B2
                          JPOS Initialization
