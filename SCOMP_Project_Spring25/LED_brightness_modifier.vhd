@@ -11,7 +11,9 @@ ENTITY LED_brightness_modifier IS
 		brightnessIn : IN std_logic_vector(BRIGHTNESS_WIDTH - 1 DOWNTO 0);
 		reset : IN std_logic;
 		load : IN std_logic;
-		output : OUT std_logic
+		output : OUT std_logic;
+		-- New output to read the current brightness value
+		current_brightness : OUT std_logic_vector(BRIGHTNESS_WIDTH - 1 DOWNTO 0)
 	);
 END LED_brightness_modifier;
 
@@ -125,5 +127,8 @@ BEGIN
 
 	gamma_val <= gamma8(to_integer(brightness_reg));
 	output <= '1' WHEN cnt < gamma_val ELSE '0';
+	
+	-- Output the current brightness value
+	current_brightness <= std_logic_vector(brightness_reg);
 
 END rtl;
