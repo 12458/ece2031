@@ -1,0 +1,42 @@
+ORG 0
+LOADI &H3FF
+OUT LEDSelect
+firstloop:
+IN Switches
+OUT LEDGlobal
+IN Switches
+AND bit9
+JZERO firstloop
+secondloop:
+LOAD primes
+OUT LEDSelect
+IN Switches
+OUT LEDGlobal
+IN Switches
+AND bit9
+JPOS secondloop
+thirdloop:
+LOADI 255
+OUT &H29
+LOADI 191
+OUT &H27
+LOADI 127
+OUT &H25
+LOADI 63
+OUT &H24
+IN Switches
+AND bit9
+JZERO thirdloop
+fourthloop:
+JUMP fourthloop
+
+
+
+bit9: DW &H200
+primes: DW &HAC
+Switches: EQU 000
+
+LEDSelect: EQU &H020
+LEDGlobal: EQU &H021
+                         
+LEDBaseADDR: EQU &H022
