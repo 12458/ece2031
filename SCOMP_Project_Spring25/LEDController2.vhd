@@ -4,21 +4,40 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 USE LPM.LPM_COMPONENTS.ALL;
-
 ENTITY LEDController2 IS
 PORT(
     CS        : IN STD_LOGIC;
     WRITE_EN  : IN STD_LOGIC;
     RESETN    : IN STD_LOGIC;
     LEDs      : OUT STD_LOGIC_VECTOR(9 DOWNTO 0);
-    LEDs_IN   : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  -- Added input for LEDs to pass through
-    IO_DATA   : IN STD_LOGIC_VECTOR(15 DOWNTO 0)
+    LEDs_IN   : IN STD_LOGIC_VECTOR(9 DOWNTO 0);  
+    IO_DATA   : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0)  
 );
 END LEDController2;
 
 ARCHITECTURE a OF LEDController2 IS
     SIGNAL control_bits : STD_LOGIC_VECTOR(9 DOWNTO 0);  -- Stores which LEDs are controlled
+    SIGNAL IO_OUT      : STD_LOGIC;  -- Enable signal for bus driver
+    SIGNAL OUT_DATA    : STD_LOGIC_VECTOR(15 DOWNTO 0);  -- Data to be driven onto IO_DATA
 BEGIN
+    -- Use LPM function to create bidirectional I/O data bus
+    IO_BUS: lpm_bustri
+    GENERIC MAP (
+        lpm_width => 16
+    )
+    PORT MAP (
+        data     => OUT_DATA,
+        enabledt => IO_OUT,
+        tridata  => IO_DATA
+    );
+    
+    -- Enable the output buffer only during read operations when this device is selected
+    IO_OUT <= (CS AND NOT(WRITE_EN));
+    
+    -- Prepare data to send back when read
+    -- When read, return the current control_bits and pad with zeros for upper bits
+    OUT_DATA <= "000000" & control_bits;  -- 6 zeros + 10 control bits
+    
     PROCESS (RESETN, CS)
     BEGIN
         IF (RESETN = '0') THEN
