@@ -1,0 +1,52 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: BBFF; -- LOADI &H3FF
+0001: 9820; -- OUT LEDToggle
+0002: 902D; --         IN      KeyIO
+0003: 1022; --         STORE   KeyInput
+0004: 4002; --         JZERO   Global_Loop
+0005: 902D; --         IN      KeyIO
+0006: 3805; --         JPOS    Global_Release
+0007: 0822; --         LOAD    KeyInput
+0008: 4823; --         AND     B0
+0009: 380E; --         JPOS    IncreaseGlobal
+000A: 0822; --         LOAD    KeyInput
+000B: 4824; --         AND     B1
+000C: 3815; --         JPOS    DecreaseGlobal
+000D: 2802; --         JUMP    Global_Loop
+000E: 0821; --         LOAD NewBright
+000F: 1826; --         ADD     PositiveDelta
+0010: 1021; --         STORE   NewBright
+0011: 0821; --         LOAD    NewBright
+0012: 9821; --         OUT     LEDGlobal
+0013: 801C; --         CALL checkbuttonzero
+0014: 2802; --         JUMP    Global_Loop
+0015: 0821; --         LOAD NewBright
+0016: 1827; --         ADD     NegativeDelta
+0017: 1021; --         STORE   NewBright
+0018: 0821; --         LOAD    NewBright
+0019: 9821; --         OUT     LEDGlobal
+001A: 801C; --         CALL checkbuttonzero
+001B: 2802; --         JUMP    Global_Loop
+001C: 902D; --         IN KeyIO
+001D: 381C; --         JPOS checkbuttonzero
+001E: 8800; --         RETURN
+001F: 0000; -- Input:          DW 0
+0020: 0000; -- CurLEDADDR:     DW 0
+0021: 007F; -- NewBright:      DW 127
+0022: 0000; -- KeyInput:       DW 0
+0023: 0001; -- B0:             DW 1
+0024: 0002; -- B1:             DW 2
+0025: 0004; -- B2:             DW 4
+0026: 0020; -- PositiveDelta:  DW 32
+0027: FFE0; -- NegativeDelta:  DW -32
+0028: 0000; -- AdderSum:       DW 0
+0029: 0000; -- AdderInput:     DW 0
+002A: 03FF; -- 10bits:         DW 1023
+[002B..07FF] : 0000; -- [empty memory]
+END;

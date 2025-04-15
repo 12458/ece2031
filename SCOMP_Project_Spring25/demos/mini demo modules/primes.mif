@@ -1,0 +1,37 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: BBFF; -- LOADI &H3FF
+0001: 9820; -- OUT LEDSelect
+0002: 9000; -- IN Switches
+0003: 9821; -- OUT LEDGlobal
+0004: 9000; -- IN Switches
+0005: 481A; -- AND bit9
+0006: 4002; -- JZERO firstloop
+0007: 081B; -- LOAD primes
+0008: 9820; -- OUT LEDSelect
+0009: 9000; -- IN Switches
+000A: 9821; -- OUT LEDGlobal
+000B: 9000; -- IN Switches
+000C: 481A; -- AND bit9
+000D: 3807; -- JPOS secondloop
+000E: B8FF; -- LOADI 255
+000F: 9829; -- OUT &H29
+0010: B8BF; -- LOADI 191
+0011: 9827; -- OUT &H27
+0012: B87F; -- LOADI 127
+0013: 9825; -- OUT &H25
+0014: B83F; -- LOADI 63
+0015: 9824; -- OUT &H24
+0016: 9000; -- IN Switches
+0017: 481A; -- AND bit9
+0018: 400E; -- JZERO thirdloop
+0019: 2819; -- JUMP fourthloop
+001A: 0200; -- bit9: DW &H200
+001B: 00AC; -- primes: DW &HAC
+[001C..07FF] : 0000; -- [empty memory]
+END;

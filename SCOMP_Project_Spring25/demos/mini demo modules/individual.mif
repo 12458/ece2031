@@ -1,0 +1,246 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: BBFF; -- LOADI &H3FF
+0001: 9820; -- OUT LEDToggle
+0002: 902D; --         IN      KeyIO
+0003: 10D0; --         STORE   KeyInput
+0004: 4002; --         JZERO   Global_Loop
+0005: 902D; --         IN      KeyIO
+0006: 3805; --         JPOS    Global_Release
+0007: 08D0; --         LOAD    KeyInput
+0008: 48D1; --         AND     B0
+0009: 380E; --         JPOS    IncreaseGlobal
+000A: 08D0; --         LOAD    KeyInput
+000B: 48D2; --         AND     B1
+000C: 383A; --         JPOS    DecreaseGlobal
+000D: 2802; --         JUMP    Global_Loop
+000E: 9000; --         IN switches
+000F: 10CD; --         STORE Input
+0010: 08CD; -- 		LOAD Input
+0011: 48D4; --         AND bit0
+0012: 4014; --         JZERO cb1
+0013: 8069; --         CALL il0
+0014: 08CD; -- 		LOAD Input
+0015: 48D5; --         AND bit1
+0016: 4018; --         JZERO cb2
+0017: 8073; --         CALL il1
+0018: 08CD; -- 		LOAD Input
+0019: 48D6; --         AND bit2
+001A: 401C; --         JZERO cb3
+001B: 807D; --         CALL il2
+001C: 08CD; -- 		LOAD Input
+001D: 48D7; --         AND bit3
+001E: 4020; --         JZERO cb4
+001F: 8087; --         CALL il3
+0020: 08CD; -- 		LOAD Input
+0021: 48D8; --         AND bit4
+0022: 4024; --         JZERO cb5
+0023: 8091; --         CALL il4
+0024: 08CD; -- 		LOAD Input
+0025: 48D9; --         AND bit5
+0026: 4028; --         JZERO cb6
+0027: 809B; --         CALL il5
+0028: 08CD; -- 		LOAD Input
+0029: 48DA; --         AND bit6
+002A: 402C; --         JZERO cb7
+002B: 80A5; --         CALL il6
+002C: 08CD; -- 		LOAD Input
+002D: 48DB; --         AND bit7
+002E: 4030; --         JZERO cb8
+002F: 80AF; --         CALL il7
+0030: 08CD; -- 		LOAD Input
+0031: 48DC; --         AND bit8
+0032: 4034; --         JZERO cb9
+0033: 80B9; --         CALL il8
+0034: 08CD; -- 		LOAD Input
+0035: 48DD; --         AND bit9
+0036: 4038; --         JZERO done
+0037: 80C3; --         CALL il9
+0038: 8066; --         CALL checkbuttonzero
+0039: 2802; --         JUMP    Global_Loop
+003A: 9000; --         IN switches
+003B: 10CD; --         STORE Input
+003C: 08CD; -- 		LOAD Input
+003D: 48D4; --         AND bit0
+003E: 4040; --         JZERO dcb1
+003F: 806E; --         CALL dl0
+0040: 08CD; -- 		LOAD Input
+0041: 48D5; --         AND bit1
+0042: 4044; --         JZERO dcb2
+0043: 8078; --         CALL dl1
+0044: 08CD; -- 		LOAD Input
+0045: 48D6; --         AND bit2
+0046: 4048; --         JZERO dcb3
+0047: 8082; --         CALL dl2
+0048: 08CD; -- 		LOAD Input
+0049: 48D7; --         AND bit3
+004A: 404C; --         JZERO dcb4
+004B: 808C; --         CALL dl3
+004C: 08CD; -- 		LOAD Input
+004D: 48D8; --         AND bit4
+004E: 4050; --         JZERO dcb5
+004F: 8096; --         CALL dl4
+0050: 08CD; -- 		LOAD Input
+0051: 48D9; --         AND bit5
+0052: 4054; --         JZERO dcb6
+0053: 80A0; --         CALL dl5
+0054: 08CD; -- 		LOAD Input
+0055: 48DA; --         AND bit6
+0056: 4058; --         JZERO dcb7
+0057: 80AA; --         CALL dl6
+0058: 08CD; -- 		LOAD Input
+0059: 48DB; --         AND bit7
+005A: 405C; --         JZERO dcb8
+005B: 80B4; --         CALL dl7
+005C: 08CD; -- 		LOAD Input
+005D: 48DC; --         AND bit8
+005E: 4060; --         JZERO dcb9
+005F: 80BE; --         CALL dl8
+0060: 08CD; -- 		LOAD Input
+0061: 48DD; --         AND bit9
+0062: 4064; --         JZERO ddone
+0063: 80C8; --         CALL dl9
+0064: 8066; --         CALL checkbuttonzero
+0065: 2802; --         JUMP    Global_Loop
+0066: 902D; --         IN KeyIO
+0067: 3866; --         JPOS checkbuttonzero
+0068: 8800; --         RETURN
+0069: 08E3; -- 	LOAD L0
+006A: 18DE; -- 	ADD PositiveDelta
+006B: 10E3; -- 	STORE L0
+006C: 9822; -- 	OUT &H022
+006D: 8800; -- 	RETURN
+006E: 08E3; -- 	LOAD L0
+006F: 18DF; -- 	ADD NegativeDelta
+0070: 10E3; -- 	STORE L0
+0071: 9822; -- 	OUT &H022
+0072: 8800; -- 	RETURN
+0073: 08E4; -- 	LOAD L1
+0074: 18DE; -- 	ADD PositiveDelta
+0075: 10E4; -- 	STORE L1
+0076: 9823; -- 	OUT &H023
+0077: 8800; -- 	RETURN
+0078: 08E4; -- 	LOAD L1
+0079: 18DF; -- 	ADD NegativeDelta
+007A: 10E4; -- 	STORE L1
+007B: 9823; -- 	OUT &H023
+007C: 8800; -- 	RETURN
+007D: 08E5; -- 	LOAD L2
+007E: 18DE; -- 	ADD PositiveDelta
+007F: 10E5; -- 	STORE L2
+0080: 9824; -- 	OUT &H024
+0081: 8800; -- 	RETURN
+0082: 08E5; -- 	LOAD L2
+0083: 18DF; -- 	ADD NegativeDelta
+0084: 10E5; -- 	STORE L2
+0085: 9824; -- 	OUT &H024
+0086: 8800; -- 	RETURN
+0087: 08E6; -- 	LOAD L3
+0088: 18DE; -- 	ADD PositiveDelta
+0089: 10E6; -- 	STORE L3
+008A: 9825; -- 	OUT &H025
+008B: 8800; -- 	RETURN
+008C: 08E6; -- 	LOAD L3
+008D: 18DF; -- 	ADD NegativeDelta
+008E: 10E6; -- 	STORE L3
+008F: 9825; -- 	OUT &H025
+0090: 8800; -- 	RETURN
+0091: 08E7; -- 	LOAD L4
+0092: 18DE; -- 	ADD PositiveDelta
+0093: 10E7; -- 	STORE L4
+0094: 9826; -- 	OUT &H026
+0095: 8800; -- 	RETURN
+0096: 08E7; -- 	LOAD L4
+0097: 18DF; -- 	ADD NegativeDelta
+0098: 10E7; -- 	STORE L4
+0099: 9826; -- 	OUT &H026
+009A: 8800; -- 	RETURN
+009B: 08E8; -- 	LOAD L5
+009C: 18DE; -- 	ADD PositiveDelta
+009D: 10E8; -- 	STORE L5
+009E: 9827; -- 	OUT &H027
+009F: 8800; -- 	RETURN
+00A0: 08E8; -- 	LOAD L5
+00A1: 18DF; -- 	ADD NegativeDelta
+00A2: 10E8; -- 	STORE L5
+00A3: 9827; -- 	OUT &H027
+00A4: 8800; -- 	RETURN
+00A5: 08E9; -- 	LOAD L6
+00A6: 18DE; -- 	ADD PositiveDelta
+00A7: 10E9; -- 	STORE L6
+00A8: 9828; -- 	OUT &H028
+00A9: 8800; -- 	RETURN
+00AA: 08E9; -- 	LOAD L6
+00AB: 18DF; -- 	ADD NegativeDelta
+00AC: 10E9; -- 	STORE L6
+00AD: 9828; -- 	OUT &H028
+00AE: 8800; -- 	RETURN
+00AF: 08EA; -- 	LOAD L7
+00B0: 18DE; -- 	ADD PositiveDelta
+00B1: 10EA; -- 	STORE L7
+00B2: 9829; -- 	OUT &H029
+00B3: 8800; -- 	RETURN
+00B4: 08EA; -- 	LOAD L7
+00B5: 18DF; -- 	ADD NegativeDelta
+00B6: 10EA; -- 	STORE L7
+00B7: 9829; -- 	OUT &H029
+00B8: 8800; -- 	RETURN
+00B9: 08EB; -- 	LOAD L8
+00BA: 18DE; -- 	ADD PositiveDelta
+00BB: 10EB; -- 	STORE L8
+00BC: 982A; -- 	OUT &H02A
+00BD: 8800; -- 	RETURN
+00BE: 08EB; -- 	LOAD L8
+00BF: 18DF; -- 	ADD NegativeDelta
+00C0: 10EB; -- 	STORE L8
+00C1: 982A; -- 	OUT &H02A
+00C2: 8800; -- 	RETURN
+00C3: 08EC; -- 	LOAD L9
+00C4: 18DE; -- 	ADD PositiveDelta
+00C5: 10EC; -- 	STORE L9
+00C6: 982B; -- 	OUT &H02B
+00C7: 8800; -- 	RETURN
+00C8: 08EC; -- 	LOAD L9
+00C9: 18DF; -- 	ADD NegativeDelta
+00CA: 10EC; -- 	STORE L9
+00CB: 982B; -- 	OUT &H02B
+00CC: 8800; -- 	RETURN
+00CD: 0000; -- Input:          DW 0
+00CE: 0000; -- CurLEDADDR:     DW 0
+00CF: 007F; -- NewBright:      DW 127
+00D0: 0000; -- KeyInput:       DW 0
+00D1: 0001; -- B0:             DW 1
+00D2: 0002; -- B1:             DW 2
+00D3: 0004; -- B2:             DW 4
+00D4: 0001; -- bit0: DW 1
+00D5: 0002; -- bit1: DW 2
+00D6: 0004; -- bit2: DW 4
+00D7: 0008; -- bit3: DW 8
+00D8: 0010; -- bit4: DW 16
+00D9: 0020; -- bit5: DW 32
+00DA: 0040; -- bit6: DW 64
+00DB: 0080; -- bit7: DW 128
+00DC: 0100; -- bit8: DW 256
+00DD: 0200; -- bit9: DW 512
+00DE: 0010; -- PositiveDelta:  DW 16
+00DF: FFF0; -- NegativeDelta:  DW -16
+00E0: 0000; -- AdderSum:       DW 0
+00E1: 0000; -- AdderInput:     DW 0
+00E2: 03FF; -- 10bits:         DW 1023
+00E3: 0064; -- L0: DW 100
+00E4: 0064; -- L1: DW 100
+00E5: 0064; -- L2: DW 100
+00E6: 0064; -- L3: DW 100
+00E7: 0064; -- L4: DW 100
+00E8: 0064; -- L5: DW 100
+00E9: 0064; -- L6: DW 100
+00EA: 0064; -- L7: DW 100
+00EB: 0064; -- L8: DW 100
+00EC: 0064; -- L9: DW 100
+[00ED..07FF] : 0000; -- [empty memory]
+END;
