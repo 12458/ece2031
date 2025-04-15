@@ -1,0 +1,38 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: B800; --         LOADI   0
+0001: 9820; --         OUT     LEDToggle       ; Turn off all LEDs
+0002: B8FF; --         LOADI   255
+0003: 9821; --         OUT     LEDGlobal
+0004: 902D; --         IN      KeyIO
+0005: 1014; --         STORE   KeyInput
+0006: 4004; --         JZERO   AdderLoop
+0007: 800E; --         CALL checkbuttonzero
+0008: 9000; --         IN      Switches        ; Grab input value from Switches
+0009: 181A; --         ADD     AdderSum             ; Load current running sum (does nothing on first loop)
+000A: 481C; --         AND     10bits                 ; Mask relevant bits 
+000B: 101A; --         STORE   AdderSum
+000C: 9820; --         OUT     LEDToggle       ; Display new sum on LEDs
+000D: 2804; --         JUMP    AdderLoop       ; Jump to InputLoop to wait for next value
+000E: 902D; --         IN KeyIO
+000F: 380E; --         JPOS checkbuttonzero
+0010: 8800; --         RETURN
+0011: 0000; -- Input:          DW 0
+0012: 0000; -- CurLEDADDR:     DW 0
+0013: 0000; -- NewBright:      DW 0
+0014: 0000; -- KeyInput:       DW 0
+0015: 0001; -- B0:             DW 1
+0016: 0002; -- B1:             DW 2
+0017: 0004; -- B2:             DW 4
+0018: 0020; -- PositiveDelta:  DW 32
+0019: FFE0; -- NegativeDelta:  DW -32
+001A: 0000; -- AdderSum:       DW 0
+001B: 0000; -- AdderInput:     DW 0
+001C: 03FF; -- 10bits:         DW 1023
+[001D..07FF] : 0000; -- [empty memory]
+END;

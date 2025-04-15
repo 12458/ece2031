@@ -1,0 +1,338 @@
+;individual
+LOADI &H3FF
+OUT LEDToggle
+Global_Loop:
+        IN      KeyIO
+        STORE   KeyInput
+
+        JZERO   Global_Loop
+Global_Release:
+        IN      KeyIO
+        JPOS    Global_Release
+
+        LOAD    KeyInput
+        AND     B0
+        JPOS    IncreaseGlobal
+
+        LOAD    KeyInput
+        AND     B1
+        JPOS    DecreaseGlobal
+
+        JUMP    Global_Loop
+
+;individual program
+IncreaseGlobal:
+        ;IN      LEDGlobal
+        IN switches
+        STORE Input
+cb0:
+		LOAD Input
+        AND bit0
+        JZERO cb1
+        CALL il0
+cb1:
+		LOAD Input
+        AND bit1
+        JZERO cb2
+        CALL il1
+cb2:
+		LOAD Input
+        AND bit2
+        JZERO cb3
+        CALL il2
+cb3:
+		LOAD Input
+        AND bit3
+        JZERO cb4
+        CALL il3
+cb4:
+		LOAD Input
+        AND bit4
+        JZERO cb5
+        CALL il4
+cb5:
+		LOAD Input
+        AND bit5
+        JZERO cb6
+        CALL il5
+cb6:
+		LOAD Input
+        AND bit6
+        JZERO cb7
+        CALL il6
+cb7:
+		LOAD Input
+        AND bit7
+        JZERO cb8
+        CALL il7
+cb8:
+		LOAD Input
+        AND bit8
+        JZERO cb9
+        CALL il8
+cb9:
+		LOAD Input
+        AND bit9
+        JZERO done
+        CALL il9
+done:
+        
+        CALL checkbuttonzero
+        JUMP    Global_Loop
+
+
+
+;individual
+DecreaseGlobal:
+        IN switches
+        STORE Input
+dcb0:
+		LOAD Input
+        AND bit0
+        JZERO dcb1
+        CALL dl0
+dcb1:
+		LOAD Input
+        AND bit1
+        JZERO dcb2
+        CALL dl1
+dcb2:
+		LOAD Input
+        AND bit2
+        JZERO dcb3
+        CALL dl2
+dcb3:
+		LOAD Input
+        AND bit3
+        JZERO dcb4
+        CALL dl3
+dcb4:
+		LOAD Input
+        AND bit4
+        JZERO dcb5
+        CALL dl4
+dcb5:
+		LOAD Input
+        AND bit5
+        JZERO dcb6
+        CALL dl5
+dcb6:
+		LOAD Input
+        AND bit6
+        JZERO dcb7
+        CALL dl6
+dcb7:
+		LOAD Input
+        AND bit7
+        JZERO dcb8
+        CALL dl7
+dcb8:
+		LOAD Input
+        AND bit8
+        JZERO dcb9
+        CALL dl8
+dcb9:
+		LOAD Input
+        AND bit9
+        JZERO ddone
+        CALL dl9
+ddone:
+        
+        CALL checkbuttonzero
+        JUMP    Global_Loop
+
+
+
+
+
+
+
+
+checkbuttonzero:
+        IN KeyIO
+        JPOS checkbuttonzero
+        RETURN
+
+il0:
+	LOAD L0
+	ADD PositiveDelta
+	STORE L0
+	OUT &H022
+	RETURN
+dl0:
+	LOAD L0
+	ADD NegativeDelta
+	STORE L0
+	OUT &H022
+	RETURN
+il1:
+	LOAD L1
+	ADD PositiveDelta
+	STORE L1
+	OUT &H023
+	RETURN
+dl1:
+	LOAD L1
+	ADD NegativeDelta
+	STORE L1
+	OUT &H023
+	RETURN
+il2:
+	LOAD L2
+	ADD PositiveDelta
+	STORE L2
+	OUT &H024
+	RETURN
+dl2:
+	LOAD L2
+	ADD NegativeDelta
+	STORE L2
+	OUT &H024
+	RETURN
+il3:
+	LOAD L3
+	ADD PositiveDelta
+	STORE L3
+	OUT &H025
+	RETURN
+dl3:
+	LOAD L3
+	ADD NegativeDelta
+	STORE L3
+	OUT &H025
+	RETURN
+il4:
+	LOAD L4
+	ADD PositiveDelta
+	STORE L4
+	OUT &H026
+	RETURN
+dl4:
+	LOAD L4
+	ADD NegativeDelta
+	STORE L4
+	OUT &H026
+	RETURN
+il5:
+	LOAD L5
+	ADD PositiveDelta
+	STORE L5
+	OUT &H027
+	RETURN
+dl5:
+	LOAD L5
+	ADD NegativeDelta
+	STORE L5
+	OUT &H027
+	RETURN
+il6:
+	LOAD L6
+	ADD PositiveDelta
+	STORE L6
+	OUT &H028
+	RETURN
+dl6:
+	LOAD L6
+	ADD NegativeDelta
+	STORE L6
+	OUT &H028
+	RETURN
+il7:
+	LOAD L7
+	ADD PositiveDelta
+	STORE L7
+	OUT &H029
+	RETURN
+dl7:
+	LOAD L7
+	ADD NegativeDelta
+	STORE L7
+	OUT &H029
+	RETURN
+il8:
+	LOAD L8
+	ADD PositiveDelta
+	STORE L8
+	OUT &H02A
+	RETURN
+dl8:
+	LOAD L8
+	ADD NegativeDelta
+	STORE L8
+	OUT &H02A
+	RETURN
+il9:
+	LOAD L9
+	ADD PositiveDelta
+	STORE L9
+	OUT &H02B
+	RETURN
+dl9:
+	LOAD L9
+	ADD NegativeDelta
+	STORE L9
+	OUT &H02B
+	RETURN
+
+
+; ██    ██  █████  ██████  ██  █████  ██████  ██      ███████ ███████ 
+; ██    ██ ██   ██ ██   ██ ██ ██   ██ ██   ██ ██      ██      ██      
+; ██    ██ ███████ ██████  ██ ███████ ██████  ██      █████   ███████ 
+;  ██  ██  ██   ██ ██   ██ ██ ██   ██ ██   ██ ██      ██           ██ 
+;   ████   ██   ██ ██   ██ ██ ██   ██ ██████  ███████ ███████ ███████
+
+Input:          DW 0
+CurLEDADDR:     DW 0
+NewBright:      DW 127
+KeyInput:       DW 0
+
+B0:             DW 1
+B1:             DW 2
+B2:             DW 4
+
+bit0: DW 1
+bit1: DW 2
+bit2: DW 4
+bit3: DW 8
+bit4: DW 16
+bit5: DW 32
+bit6: DW 64
+bit7: DW 128
+bit8: DW 256
+bit9: DW 512
+
+
+PositiveDelta:  DW 16
+NegativeDelta:  DW -16
+
+AdderSum:       DW 0
+AdderInput:     DW 0
+
+10bits:         DW 1023
+
+L0: DW 100
+L1: DW 100
+L2: DW 100
+L3: DW 100
+L4: DW 100
+L5: DW 100
+L6: DW 100
+L7: DW 100
+L8: DW 100
+L9: DW 100
+
+
+
+
+; ██  ██████       █████  ██████  ██████  ██████  ███████ ███████ ███████ ███████ ███████ 
+; ██ ██    ██     ██   ██ ██   ██ ██   ██ ██   ██ ██      ██      ██      ██      ██      
+; ██ ██    ██     ███████ ██   ██ ██   ██ ██████  █████   ███████ ███████ █████   ███████ 
+; ██ ██    ██     ██   ██ ██   ██ ██   ██ ██   ██ ██           ██      ██ ██           ██ 
+; ██  ██████      ██   ██ ██████  ██████  ██   ██ ███████ ███████ ███████ ███████ ███████
+
+Switches:       EQU 000
+KeyIO:          EQU &H02D
+LEDToggle:      EQU &H020
+LEDGlobal:      EQU &H021
+
+LEDBaseADDR:    EQU &H022

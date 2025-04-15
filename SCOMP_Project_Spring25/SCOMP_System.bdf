@@ -906,7 +906,7 @@ https://fpgasoftware.intel.com/eula.
 		(pt 264 48)
 		(output)
 		(text "LEDS_OUT[9..0]" (rect 0 0 82 12)(font "Arial" ))
-		(text "LEDS_OUT[9..0]" (rect 174 43 243 55)(font "Arial" ))
+		(text "LEDS_OUT[9..0]" (rect 174 43 256 55)(font "Arial" ))
 		(line (pt 264 48)(pt 248 48)(line_width 3))
 	)
 	(port
@@ -921,7 +921,7 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 1080 1040 1312 1152)
+	(rect 1064 1040 1296 1152)
 	(text "LEDController2" (rect 5 0 79 12)(font "Arial" ))
 	(text "inst14" (rect 8 96 37 108)(font "Arial" ))
 	(port
@@ -956,7 +956,7 @@ https://fpgasoftware.intel.com/eula.
 		(pt 232 32)
 		(output)
 		(text "LEDs[9..0]" (rect 0 0 53 12)(font "Arial" ))
-		(text "LEDs[9..0]" (rect 167 27 211 39)(font "Arial" ))
+		(text "LEDs[9..0]" (rect 167 27 220 39)(font "Arial" ))
 		(line (pt 232 32)(pt 216 32)(line_width 3))
 	)
 	(port
@@ -1327,28 +1327,9 @@ https://fpgasoftware.intel.com/eula.
 	(bus)
 )
 (connector
-	(text "resetn" (rect 986 1088 1015 1105)(font "Intel Clear" ))
-	(pt 1080 1104)
-	(pt 976 1104)
-)
-(connector
-	(text "IO_WRITE" (rect 984 1072 1032 1089)(font "Intel Clear" ))
-	(pt 976 1088)
-	(pt 1080 1088)
-)
-(connector
 	(text "tpwire[0]" (rect 1040 970 1057 1012)(font "Intel Clear" )(vertical))
 	(pt 1056 920)
 	(pt 1056 1024)
-)
-(connector
-	(text "LED_EN" (rect 986 1056 1023 1073)(font "Intel Clear" ))
-	(pt 1080 1072)
-	(pt 1056 1072)
-)
-(connector
-	(pt 1056 1072)
-	(pt 976 1072)
 )
 (connector
 	(text "clk_400kHz" (rect 530 952 585 969)(font "Intel Clear" ))
@@ -1386,18 +1367,8 @@ https://fpgasoftware.intel.com/eula.
 	(pt 576 1184)
 )
 (connector
-	(pt 1080 1120)
-	(pt 920 1120)
-	(bus)
-)
-(connector
 	(pt 888 984)
 	(pt 920 984)
-	(bus)
-)
-(connector
-	(pt 920 984)
-	(pt 920 1120)
 	(bus)
 )
 (connector
@@ -1424,36 +1395,65 @@ https://fpgasoftware.intel.com/eula.
 	(pt 624 1048)
 )
 (connector
-	(pt 1296 1072)
-	(pt 1312 1072)
-	(bus)
-)
-(connector
-	(pt 1312 1072)
-	(pt 1336 1072)
-	(bus)
-)
-(connector
-	(pt 1320 1088)
-	(pt 1320 1104)
-	(bus)
-)
-(connector
-	(pt 1312 1088)
-	(pt 1320 1088)
-	(bus)
-)
-(connector
 	(text "IO_DATA[15..0]" (rect 1322 1088 1395 1105)(font "Intel Clear" ))
 	(pt 1320 1104)
 	(pt 1408 1104)
+	(bus)
+)
+(connector
+	(text "resetn" (rect 970 1088 999 1105)(font "Intel Clear" ))
+	(pt 1064 1104)
+	(pt 960 1104)
+)
+(connector
+	(text "IO_WRITE" (rect 968 1072 1016 1089)(font "Intel Clear" ))
+	(pt 960 1088)
+	(pt 1064 1088)
+)
+(connector
+	(pt 920 1120)
+	(pt 1064 1120)
+	(bus)
+)
+(connector
+	(pt 920 984)
+	(pt 920 1120)
+	(bus)
+)
+(connector
+	(pt 1320 1104)
+	(pt 1320 1088)
+	(bus)
+)
+(connector
+	(text "LED_EN" (rect 978 1056 1015 1073)(font "Intel Clear" ))
+	(pt 976 1072)
+	(pt 1056 1072)
+)
+(connector
+	(pt 1056 1072)
+	(pt 1064 1072)
+)
+(connector
+	(pt 1296 1088)
+	(pt 1320 1088)
+	(bus)
+)
+(connector
+	(pt 1280 1072)
+	(pt 1296 1072)
+	(bus)
+)
+(connector
+	(pt 1296 1072)
+	(pt 1336 1072)
 	(bus)
 )
 (junction (pt 536 280))
 (junction (pt 576 1000))
 (junction (pt 1056 1072))
 (junction (pt 576 1080))
-(junction (pt 1312 1072))
+(junction (pt 1296 1072))
 (text "The daughterboard test points." (rect 1264 832 1446 851)(font "Intel Clear" (font_size 8)))
 (text "Can be useful for testing using the oscilloscope." (rect 1264 856 1541 875)(font "Intel Clear" (font_size 8)))
 (title_block
@@ -1463,7 +1463,7 @@ https://fpgasoftware.intel.com/eula.
 	(section (rect 0 48 368 72)(text "DESIGNER" (rect 2 0 59 12)(font "Arial" ))(text "Kevin Johnson, Tom Collins" (rect 56 2 286 20)(font "Arial" (font_size 12)))(border))
 	(section (rect 0 72 280 96)(text "NUMBER" (rect 2 0 49 12)(font "Arial" ))(text "1.00" (rect 56 1 85 17)(font "Arial" (font_size 10)))(border))
 	(section (rect 280 72 368 96)(text "REV" (rect 2 1 25 13)(font "Arial" ))(text "B" (rect 43 1 53 17)(font "Arial" (font_size 10)))(border))
-	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Sun Apr 13 15:30:39 2025" (rect 56 3 234 19)(font "Arial" (font_size 10)))(date)(border))
+	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Mon Apr 14 17:49:30 2025" (rect 56 3 236 19)(font "Arial" (font_size 10)))(date)(border))
 	(section (rect 240 96 310 120)(text "SHEET" (rect 2 0 37 12)(font "Arial" ))(text "1" (rect 55 5 63 21)(font "Arial" (font_size 10))))
 	(section (rect 310 96 368 120)(text "OF" (rect 10 0 25 12)(font "Arial" ))(text "1" (rect 34 4 42 20)(font "Arial" (font_size 10))))
 	(drawing
